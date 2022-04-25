@@ -191,10 +191,11 @@ namespace EngTranslatorMod
         public static Dictionary<string, string> FungusMenuDict;
         public static Dictionary<string, string> etcDict;
         public static TranslatorKun translatorKun;
-        public string FailedRegistry = Path.Combine(BepInEx.Paths.PluginPath, "MissedStrings.txt");
+        
 
 
-        public static Dictionary<string, string> FailedStringsDict = new Dictionary<string, string>(); //String Name, Location; no comparer passed to avoid fuzzy matching invalid strings
+
+public static Dictionary<string, string> FailedStringsDict = new Dictionary<string, string>(); //String Name, Location; no comparer passed to avoid fuzzy matching invalid strings
 
         public static void TranslateDictionary<T1>(Dictionary<T1, JSONObject> dict, List<string> fields)
         {
@@ -215,11 +216,15 @@ namespace EngTranslatorMod
 
         public static void AddFailedStringToDict(string s, string location)
         {
+
+
             if (FailedStringsDict.ContainsKey(s))
             {
+
                 return;
             }
             FailedStringsDict.Add(s, location);
+
         }
 
         public static Dictionary<string, string> FileToDictionary(string dir)
@@ -240,12 +245,30 @@ namespace EngTranslatorMod
 
         public void Awake()
         {
+            //Preparing FailedRegistry.txt - Step 1
 
+            string FailedRegistry = Path.Combine(BepInEx.Paths.PluginPath, "MissedStrings.txt");
+            using (FileStream fs = File.Open(FailedRegistry, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
 
+            }
             try
             {
+                //Preparing FailedRegistry.txt - Step 2 
+                using (StreamWriter sw = File.AppendText(FailedRegistry))
+                {
+                    string Hello = "Hey ! Below, you'll find any untranslated lines in the game .json files !";
+                    sw.Write(Hello);
+                    sw.Write(Environment.NewLine);
+                    sw.Write("---");
+                    sw.Write(Environment.NewLine);
+                    sw.Write(Environment.NewLine);
+                }
 
-              
                 //We merge these two dictionaries, we also do it on TextAsset cause it's larger so this is more performant
                 var _UITextDict = FileToDictionary("UIText.txt");
 
@@ -885,7 +908,24 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                 }
                 else
                 {
-                    //    Main.AddFailedStringToDict(__result, " USelectNum_Show_Patch");
+                    Main.AddFailedStringToDict(__result, " USelectNum_Show_Patch");
+                    string FailedRegistry = Path.Combine(BepInEx.Paths.PluginPath, "MissedStrings.txt");
+                    //Logging only TextAssets in .\BepinEx\Plugin\MissedStrings.txt
+                    if (Helpers.IsChinese(__result))
+                    {
+                        IDictionary<string, string> map = new Dictionary<string, string>()
+                        {
+                        {"\n","\\n"},
+                        {"\r","\\r"},
+                        };
+                        //Regexing to put it in the correct TA format
+                        using (StreamWriter sw = File.AppendText(FailedRegistry))
+                        {
+                            __result = Regex.Replace(__result, "\n", "\\n");
+                            __result = Regex.Replace(__result, "\r", "\\r");
+                            sw.WriteLine(__result);
+                        }
+                    }
                 }
             }
             catch (Exception e)
@@ -956,6 +996,7 @@ public static class DictionaryExtensions
                     result[x.Key] = x.Value;
             return result;
         }
+
     }
 
 }
