@@ -64,7 +64,6 @@ namespace EngTranslatorMod
     {
 
 
-        List<Text> knowTexts = new List<Text>();
 
         public TranslatorKun Init()
         {
@@ -83,7 +82,11 @@ namespace EngTranslatorMod
         public void Awake()
         {
             Debug.Log("Translator Kun is alive");
+            
+            
         }
+
+        List<Text> knowTexts = new List<Text>();
 
         public void LogCurrentSceneName()
         {
@@ -91,13 +94,14 @@ namespace EngTranslatorMod
             Debug.Log(scene.name);
         }
 
-        private void Update()
+        private void Update() // Broken
         {
+            bool f9Pressed = Input.GetKeyUp(KeyCode.F9) || Input.GetKey(KeyCode.F9) || Input.GetKeyDown(KeyCode.F9);
             if (Input.GetKeyUp(KeyCode.F10) == true)
             {
                 LogCurrentSceneName();
             }
-            if (Input.GetKeyUp(KeyCode.F9) == true)
+            if (f9Pressed)
             {
                 Debug.Log("--- Loggin failed strings ---");
                 foreach (var kvp in Main.FailedStringsDict)
@@ -187,6 +191,7 @@ namespace EngTranslatorMod
         public static Dictionary<string, string> FungusMenuDict;
         public static Dictionary<string, string> etcDict;
         public static TranslatorKun translatorKun;
+        public string FailedRegistry = Path.Combine(BepInEx.Paths.PluginPath, "MissedStrings.txt");
 
 
         public static Dictionary<string, string> FailedStringsDict = new Dictionary<string, string>(); //String Name, Location; no comparer passed to avoid fuzzy matching invalid strings
@@ -203,18 +208,8 @@ namespace EngTranslatorMod
                         Debug.Log($"Trying to translate: {jsonObject["field"].Str}");
                     }
                 }
-                /*
-                if (Main.enabledDebugLogging) Debug.Log($"Trying to translate: {kvp.Value}");
-                if (Main.translationDict.ContainsKey(kvp.Value))
-                {
-                    mergeDict[kvp.Key] = Main.translationDict[kvp.Value];
 
-                }
-                else
-                {
-                    Main.AddFailedStringToDict(kvp.Value, " TuJianDB_InitDB_Patch");
-                }
-                */
+                 
             }
         }
 
@@ -250,7 +245,7 @@ namespace EngTranslatorMod
             try
             {
 
-                Logger.LogInfo("Hello ?");
+              
                 //We merge these two dictionaries, we also do it on TextAsset cause it's larger so this is more performant
                 var _UITextDict = FileToDictionary("UIText.txt");
 
@@ -746,13 +741,6 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
     }
 
 
-
-    static class ToolsEx
-    {
-
-    }
-                // Do your stuff
-
     //This patch is for Items Trading Interest 
     [HarmonyPatch(typeof(jsonData), "InitLogic")]
     static class jsonData_InitLogic
@@ -760,28 +748,28 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
         static AccessTools.FieldRef<jsonData, JObject> AllItemLeiXinRef =
         AccessTools.FieldRefAccess<jsonData, JObject>("AllItemLeiXin");
 
-        static AccessTools.FieldRef<jsonData, JSONObject> LianQiLingWenBiaoRef =
-        AccessTools.FieldRefAccess<jsonData, JSONObject>("LianQiLingWenBiao");
-
 
         static void Postfix(jsonData __instance)
         {
             var AllItemLeiXin = AllItemLeiXinRef(__instance);
-            var LianQiLingWenBiao = LianQiLingWenBiaoRef(__instance);
+
             try
             {
                 foreach (KeyValuePair<string, JToken> kvp in AllItemLeiXin)
                 {
-                 //   Debug.Log("aaaname" + (string)AllItemLeiXin[kvp.Key]["name"]);
+                    //   Debug.Log("aaaname" + (string)AllItemLeiXin[kvp.Key]["name"]);
                     if (Main.translationDict.ContainsKey((string)AllItemLeiXin[kvp.Key]["name"]))
                     {
-                           // if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.translationDict[(string)AllItemLeiXin[kvp.Key]["name"]]}");
+                        // if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.translationDict[(string)AllItemLeiXin[kvp.Key]["name"]]}");
                         AllItemLeiXin[kvp.Key]["name"] = Main.translationDict[(string)AllItemLeiXin[kvp.Key]["name"]];
-                            // if (Main.enabledDebugLogging) Debug.Log($"Updated String: {(string)AllItemLeiXin[kvp.Key]["name"]}");
+                        // if (Main.enabledDebugLogging) Debug.Log($"Updated String: {(string)AllItemLeiXin[kvp.Key]["name"]}");
+                    }
+                    else
+                    { 
                     }
                 }
 
-          //            Debug.Log("aaaname" + LianQiLingWenBiao);
+                //            Debug.Log("aaaname" + LianQiLingWenBiao);
             }
             catch (Exception e)
             {
@@ -794,7 +782,7 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
 
     }
 
-     [HarmonyPatch]
+    [HarmonyPatch]
 
     static class ToolTipsMag_CreateShuXing
     {
@@ -847,7 +835,7 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
     {
         static IEnumerable<MethodBase> TargetMethods()
         {
-            yield return AccessTools.Method(typeof(MainUIDataCell), "Click") ;
+            yield return AccessTools.Method(typeof(MainUIDataCell), "Click");
             yield return AccessTools.Method(typeof(AvatarInfoCell), "click");
             yield return AccessTools.Method(typeof(Tab.TabDataBase), "Load");
             yield return AccessTools.Method(typeof(Tab.TabDataBase), "Save");
@@ -875,41 +863,68 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
 
 
         }
-        [HarmonyPatch(typeof(JSONObject), "Str", MethodType.Getter)]
-        static class JSONObject_Patch
+    }
+
+    [HarmonyPatch(typeof(JSONObject), "Str", MethodType.Getter)]
+    static class JSONObject_Patch
+    {
+        static AccessTools.FieldRef<JSONObject, string> strRef =
+        AccessTools.FieldRefAccess<JSONObject, string>("str");
+        static void Postfix(JSONObject __instance, ref string __result)
         {
-            static AccessTools.FieldRef<JSONObject, string> strRef =
-            AccessTools.FieldRefAccess<JSONObject, string>("str");
-            static void Postfix(JSONObject __instance, string __stringKey)
+            try
             {
-                try
+                // if (Main.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                if (Main.translationDict.ContainsKey(__result))
                 {
-                    // if (Main.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
-                    if (Main.translationDict.ContainsKey(__stringKey))
-                    {
-                        //     if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.translationDict[__result]}");
-                        __instance.str = Main.translationDict[__stringKey];
-                        //     if (Main.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
-                    }
-                    else
-                    {
-                        //    Main.AddFailedStringToDict(__result, " USelectNum_Show_Patch");
-                    }
+                    //     if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.translationDict[__result]}");
+                    //        __result = Main.translationDict[__result];
+                    __instance.str = Main.translationDict[__result];
+
+                    //     if (Main.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
                 }
-                catch (Exception e)
+                else
                 {
-                    Debug.Log(e.ToString());
+                    //    Main.AddFailedStringToDict(__result, " USelectNum_Show_Patch");
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.ToString());
+            }
+        }
+        static void Postfix(ref string __result)
+        {
+            try
+            {
+                // if (Main.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                if (Main.translationDict.ContainsKey(__result))
+                {
+                    //     if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.translationDict[__result]}");
+                    __result = Main.translationDict[__result];
+                    //__instance.str = Main.translationDict[__result];
+
+                    //     if (Main.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
+                }
+                else
+                {
+                    //    Main.AddFailedStringToDict(__result, " USelectNum_Show_Patch");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.ToString());
             }
         }
     }
 
-    // Same thing as above
+
+// Same thing as above
 
 
 
-  
-    public static class DictionaryExtensions
+
+public static class DictionaryExtensions
     {
         // Works in C#3/VS2008:
         // Returns a new dictionary of this ... others merged leftward.
@@ -949,4 +964,4 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
 
 
 
-    
+
