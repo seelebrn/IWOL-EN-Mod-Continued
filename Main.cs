@@ -880,17 +880,15 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
         {
             static AccessTools.FieldRef<JSONObject, string> strRef =
             AccessTools.FieldRefAccess<JSONObject, string>("str");
-            static void Postfix(ref JSONObject __instance, ref string __result)
+            static void Postfix(JSONObject __instance, string __stringKey)
             {
-
-
                 try
                 {
                     // if (Main.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
-                    if (Main.translationDict.ContainsKey(__result))
+                    if (Main.translationDict.ContainsKey(__stringKey))
                     {
                         //     if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.translationDict[__result]}");
-                        __result = Main.translationDict[__result];
+                        __instance.str = Main.translationDict[__stringKey];
                         //     if (Main.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
                     }
                     else
@@ -902,9 +900,6 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                 {
                     Debug.Log(e.ToString());
                 }
-
-
-
             }
         }
     }
