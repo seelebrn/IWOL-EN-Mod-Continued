@@ -63,7 +63,7 @@ namespace EngTranslatorMod
     public class TranslatorKun : MonoBehaviour
     {
 
-
+        List<Text> knowTexts = new List<Text>();
 
         public TranslatorKun Init()
         {
@@ -82,11 +82,7 @@ namespace EngTranslatorMod
         public void Awake()
         {
             Debug.Log("Translator Kun is alive");
-            
-            
         }
-
-        List<Text> knowTexts = new List<Text>();
 
         public void LogCurrentSceneName()
         {
@@ -94,14 +90,13 @@ namespace EngTranslatorMod
             Debug.Log(scene.name);
         }
 
-        private void Update() // Broken
+        private void Update()
         {
-            bool f9Pressed = Input.GetKeyUp(KeyCode.F9) || Input.GetKey(KeyCode.F9) || Input.GetKeyDown(KeyCode.F9);
             if (Input.GetKeyUp(KeyCode.F10) == true)
             {
                 LogCurrentSceneName();
             }
-            if (f9Pressed)
+            if (Input.GetKeyUp(KeyCode.F9) == true)
             {
                 Debug.Log("--- Loggin failed strings ---");
                 foreach (var kvp in Main.FailedStringsDict)
@@ -1000,9 +995,4 @@ public static class DictionaryExtensions
     }
 
 }
-
-
-
-
-
 
