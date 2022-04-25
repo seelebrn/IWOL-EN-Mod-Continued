@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -760,13 +760,14 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
         static AccessTools.FieldRef<jsonData, JObject> AllItemLeiXinRef =
         AccessTools.FieldRefAccess<jsonData, JObject>("AllItemLeiXin");
 
-
+        static AccessTools.FieldRef<jsonData, JSONObject> LianQiLingWenBiaoRef =
+        AccessTools.FieldRefAccess<jsonData, JSONObject>("LianQiLingWenBiao");
 
 
         static void Postfix(jsonData __instance)
         {
             var AllItemLeiXin = AllItemLeiXinRef(__instance);
-
+            var LianQiLingWenBiao = LianQiLingWenBiaoRef(__instance);
             try
             {
                 foreach (KeyValuePair<string, JToken> kvp in AllItemLeiXin)
@@ -792,8 +793,6 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
         }
 
     }
-
-
 
      [HarmonyPatch]
 
@@ -875,6 +874,38 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             return codes.AsEnumerable();
 
 
+        }
+        [HarmonyPatch(typeof(JSONObject), "Str", MethodType.Getter)]
+        static class JSONObject_Patch
+        {
+            static AccessTools.FieldRef<JSONObject, string> strRef =
+            AccessTools.FieldRefAccess<JSONObject, string>("str");
+            static void Postfix(ref JSONObject __instance, ref string __result)
+            {
+
+
+                try
+                {
+                    // if (Main.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                    if (Main.translationDict.ContainsKey(__result))
+                    {
+                        //     if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.translationDict[__result]}");
+                        __result = Main.translationDict[__result];
+                        //     if (Main.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
+                    }
+                    else
+                    {
+                        //    Main.AddFailedStringToDict(__result, " USelectNum_Show_Patch");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e.ToString());
+                }
+
+
+
+            }
         }
     }
 
