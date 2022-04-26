@@ -275,7 +275,7 @@ public static Dictionary<string, string> FailedStringsDict = new Dictionary<stri
                 File.WriteAllLines(
 "C:\\Program Files (x86)\\Steam\\steamapps\\common\\觅长生\\BepInEx\\plugins\\TextAssetBeforeMergeLeft.txt",
 TextAssetDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
-                TextAssetDict = TextAssetDict.MergeLeft(_UITextDict);
+                TextAssetDict = _UITextDict.MergeLeft(TextAssetDict);
                 /*                File.WriteAllLines(
                 "C:\\Program Files (x86)\\Steam\\steamapps\\common\\觅长生\\BepInEx\\plugins\\TextAssetAfterMergeLeft.txt",
                 TextAssetDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));
@@ -441,6 +441,7 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                 {
                     Main.AddFailedStringToDict(storyText, " Say_OnEnter_Patch");
                 }
+
             }
             catch (Exception e)
             {
