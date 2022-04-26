@@ -174,7 +174,7 @@ namespace EngTranslatorMod
         public const string pluginName = "ENMod Continued";
         public const string pluginVersion = "0.5";
         public static bool enabled;
-        public static bool enabledDebugLogging = true;
+        public static bool enabledDebugLogging = false;
         public static StripedWhiteSpaceCompare comparer = new StripedWhiteSpaceCompare();
         public static Dictionary<string, string> translationDict;
 
@@ -906,6 +906,7 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                     Main.AddFailedStringToDict(__result, " USelectNum_Show_Patch");
                     string FailedRegistry = Path.Combine(BepInEx.Paths.PluginPath, "MissedStrings.txt");
                     //Logging only TextAssets in .\BepinEx\Plugin\MissedStrings.txt
+              
                     if (Helpers.IsChinese(__result))
                     {
                         IDictionary<string, string> map = new Dictionary<string, string>()
@@ -916,10 +917,16 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                         //Regexing to put it in the correct TA format
                         using (StreamWriter sw = File.AppendText(FailedRegistry))
                         {
-                            __result = Regex.Replace(__result, "\n", "\\n");
-                            __result = Regex.Replace(__result, "\r", "\\r");
-                            sw.WriteLine(__result);
+                            if (!FailedRegistry.Contains(__result))
+                            {
+
+                                __result = Regex.Replace(__result, "\n", "\\n");
+                                __result = Regex.Replace(__result, "\r", "\\r");
+
+                                sw.WriteLine(__result);
+                            }
                         }
+
                     }
                 }
             }
