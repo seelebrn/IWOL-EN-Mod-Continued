@@ -236,7 +236,10 @@ namespace EngTranslatorMod
                 if (arr[0] != arr[1])
                 {
                     var pair = new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
-                    dict.Add(pair.Key, pair.Value);
+                    if (!dict.ContainsKey(pair.Key))
+                        dict.Add(pair.Key, pair.Value);
+                    else
+                        Debug.Log($"Found a duplicated line while parsing {dir}: {pair.Key}");
                 }
             }
 
