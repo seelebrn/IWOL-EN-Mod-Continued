@@ -186,11 +186,11 @@ namespace EngTranslatorMod
         public static Dictionary<string, string> FungusMenuDict;
         public static Dictionary<string, string> etcDict;
         public static TranslatorKun translatorKun;
-        
 
 
 
-public static Dictionary<string, string> FailedStringsDict = new Dictionary<string, string>(); //String Name, Location; no comparer passed to avoid fuzzy matching invalid strings
+
+        public static Dictionary<string, string> FailedStringsDict = new Dictionary<string, string>(); //String Name, Location; no comparer passed to avoid fuzzy matching invalid strings
 
         public static void TranslateDictionary<T1>(Dictionary<T1, JSONObject> dict, List<string> fields)
         {
@@ -205,7 +205,7 @@ public static Dictionary<string, string> FailedStringsDict = new Dictionary<stri
                     }
                 }
 
-                 
+
             }
         }
 
@@ -225,15 +225,32 @@ public static Dictionary<string, string> FailedStringsDict = new Dictionary<stri
         public static Dictionary<string, string> FileToDictionary(string dir)
         {
             Debug.Log(BepInEx.Paths.PluginPath);
-            return File.ReadLines(Path.Combine(BepInEx.Paths.PluginPath, "Translations", dir))
-                .Select(line =>
+
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+
+            IEnumerable<string> lines = File.ReadLines(Path.Combine(BepInEx.Paths.PluginPath, "Translations", dir));
+
+            foreach (string line in lines)
+            {
+                var arr = line.Split('¤');
+                if (arr[0] != arr[1])
                 {
-                    var arr = line.Split('¤');
-                    return new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
-                })
-                .GroupBy(kvp => kvp.Key)
-                .Select(x => x.First())
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
+                    var pair = new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
+                    dict.Add(pair.Key, pair.Value);
+                }
+            }
+
+            return dict;
+
+            //return File.ReadLines(Path.Combine(BepInEx.Paths.PluginPath, "Translations", dir))
+            //    .Select(line =>
+            //    {
+            //        var arr = line.Split('¤');
+            //        return new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
+            //    })
+            //    .GroupBy(kvp => kvp.Key)
+            //    .Select(x => x.First())
+            //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
         }
 
 
@@ -784,7 +801,7 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                         // if (Main.enabledDebugLogging) Debug.Log($"Updated String: {(string)AllItemLeiXin[kvp.Key]["name"]}");
                     }
                     else
-                    { 
+                    {
                     }
                 }
 
@@ -907,7 +924,7 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                     Main.AddFailedStringToDict(__result, " USelectNum_Show_Patch");
                     string FailedRegistry = Path.Combine(BepInEx.Paths.PluginPath, "MissedStrings.txt");
                     //Logging only TextAssets in .\BepinEx\Plugin\MissedStrings.txt
-              
+
                     if (Helpers.IsChinese(__result))
                     {
                         IDictionary<string, string> map = new Dictionary<string, string>()
@@ -962,12 +979,12 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
     }
 
 
-// Same thing as above
+    // Same thing as above
 
 
 
 
-public static class DictionaryExtensions
+    public static class DictionaryExtensions
     {
         // Works in C#3/VS2008:
         // Returns a new dictionary of this ... others merged leftward.
