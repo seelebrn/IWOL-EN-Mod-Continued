@@ -791,26 +791,23 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
         static void Postfix(jsonData __instance)
         {
             var AllItemLeiXin = AllItemLeiXinRef(__instance);
-            Debug.Log("Starting");
+
             try
             {
                 foreach (KeyValuePair<string, JToken> kvp in AllItemLeiXin)
                 {
-//                    Debug.Log("StartFight");
-                    Debug.Log((string)AllItemLeiXin[kvp.Key]["name"]);
-                    //   Debug.Log("aaaname" + (string)AllItemLeiXin[kvp.Key]["name"]);
-                    if (Main.translationDict.ContainsKey((string)AllItemLeiXin[kvp.Key]["name"]))
-                    {
-                        // if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.translationDict[(string)AllItemLeiXin[kvp.Key]["name"]]}");
+                   if (Main.translationDict.ContainsKey((string)AllItemLeiXin[kvp.Key]["name"]))
+                    {                      
+
                         AllItemLeiXin[kvp.Key]["name"] = Main.translationDict[(string)AllItemLeiXin[kvp.Key]["name"]];
-                        // if (Main.enabledDebugLogging) Debug.Log($"Updated String: {(string)AllItemLeiXin[kvp.Key]["name"]}");
                     }
                     else
                     {
+
                     }
                 }
 
-                //            Debug.Log("aaaname" + LianQiLingWenBiao);
+
             }
             catch (Exception e)
             {
@@ -847,7 +844,19 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             yield return AccessTools.Method(typeof(Tab.WuDaoTooltip), "Show");
             yield return AccessTools.Method(typeof(WuDaoCellTooltip), "open");
             yield return AccessTools.Method(typeof(SiXuData), "Init");
-
+//            yield return AccessTools.Method(typeof(UIMiniTaskPanel), "RefreshUI");
+//            yield return AccessTools.Method(typeof(TaskDescManager), "setCurTaskDesc");
+//            yield return AccessTools.Method(typeof(TaskDescManager), "setCurTime");
+//            yield return AccessTools.Method(typeof(TaskDescManager), "setChuanWenWenTuo");
+//            yield return AccessTools.Method(typeof(TaskDescManager), "setChuanMiaoShu");
+//            yield return AccessTools.Method(typeof(TaskDescManager), "getShengYuShiJi");
+            yield return AccessTools.Method(typeof(BiGuanYinfo), "getTaskNextTime");
+            yield return AccessTools.Method(typeof(BiGuanYinfo), "Update");
+            yield return AccessTools.Method(typeof(TaskCell), "getTaskNextTime");
+            yield return AccessTools.Method(typeof(MainUIDataCell), "Init");
+            yield return AccessTools.Method(typeof(UIBiGuanPanel), "RefreshKeFangTime");
+            yield return AccessTools.Method(typeof(Tools), "getStr");
+            yield return AccessTools.Method(typeof(UIBiGuanXiuLianPanel), "RefreshSpeedUI");
 
 
         }
@@ -858,15 +867,17 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             {
                 if (codes[i].opcode == OpCodes.Ldstr)
                 {
-
+                    Debug.Log("Trying to Translate : " + codes[i].operand.ToString());
                 }
 
                 if (codes[i].opcode == OpCodes.Ldstr && Main.translationDict.ContainsKey(codes[i].operand.ToString()))
                 {
+
                     codes[i].operand = Main.translationDict[codes[i].operand.ToString()];
 
-
+                    Debug.Log("Result : " + codes[i].operand.ToString());
                 }
+              
 
             }
             return codes.AsEnumerable();
