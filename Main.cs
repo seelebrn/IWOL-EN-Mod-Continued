@@ -225,6 +225,15 @@ namespace EngTranslatorMod
         public static Dictionary<string, string> FileToDictionary(string dir)
         {
             Debug.Log(BepInEx.Paths.PluginPath);
+            string ExcludePattern1 = "^神秘铁剑[^¤].*$";
+            string ExcludePattern2 = "^昔日身份[^¤].*$";
+            string ExcludePattern3 = "^魔道踪影[^¤].*$";
+            string ExcludePattern4 = "^御剑门之谜[^¤].*$";
+            string ExcludePattern5 = "^往昔追忆开局¤.*$";
+            string ExcludePattern6 = "^为神秘铁剑¤.*$";
+            string ExcludePattern7 = "^神秘铁剑¤.*$";
+
+
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
@@ -232,29 +241,37 @@ namespace EngTranslatorMod
 
             foreach (string line in lines)
             {
+
                 var arr = line.Split('¤');
                 if (arr[0] != arr[1])
                 {
                     var pair = new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
-                    if (!dict.ContainsKey(pair.Key))
-                        dict.Add(pair.Key, pair.Value);
+                    if (!Regex.IsMatch(line, ExcludePattern1) && !Regex.IsMatch(line, ExcludePattern2) && !Regex.IsMatch(line, ExcludePattern3) && !Regex.IsMatch(line, ExcludePattern4) && !Regex.IsMatch(line, ExcludePattern5) && !Regex.IsMatch(line, ExcludePattern6) && !Regex.IsMatch(line, ExcludePattern7))
+                    {
+                        if (!dict.ContainsKey(pair.Key))
+                            dict.Add(pair.Key, pair.Value);
+                        else
+                            Debug.Log($"Found a duplicated line while parsing {dir}: {pair.Key}");
+                    }
                     else
-                        Debug.Log($"Found a duplicated line while parsing {dir}: {pair.Key}");
+                    {
+                        Debug.Log("Not touching this with a 10ft pole : " + arr[0]);
+                    }
                 }
             }
 
             return dict;
 
-            //return File.ReadLines(Path.Combine(BepInEx.Paths.PluginPath, "Translations", dir))
-            //    .Select(line =>
-            //    {
-            //        var arr = line.Split('¤');
-            //        return new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
-            //    })
-            //    .GroupBy(kvp => kvp.Key)
-            //    .Select(x => x.First())
-            //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
-        }
+        //return File.ReadLines(Path.Combine(BepInEx.Paths.PluginPath, "Translations", dir))
+        //    .Select(line =>
+        //    {
+        //        var arr = line.Split('¤');
+        //        return new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
+        //    })
+        //    .GroupBy(kvp => kvp.Key)
+        //    .Select(x => x.First())
+        //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
+    }
 
 
 
@@ -472,7 +489,7 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
 
     //Fungus dialog box
     [HarmonyPatch(typeof(Flowchart), "SubstituteVariables")]
-    static class Flowchartg_SubstituteVariables_Patch
+    static class Flowchart_SubstituteVariables_Patch
     {
         static void Prefix(ref string input)
         {
@@ -796,8 +813,8 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             {
                 foreach (KeyValuePair<string, JToken> kvp in AllItemLeiXin)
                 {
-                   if (Main.translationDict.ContainsKey((string)AllItemLeiXin[kvp.Key]["name"]))
-                    {                      
+                    if (Main.translationDict.ContainsKey((string)AllItemLeiXin[kvp.Key]["name"]))
+                    {
 
                         AllItemLeiXin[kvp.Key]["name"] = Main.translationDict[(string)AllItemLeiXin[kvp.Key]["name"]];
                     }
@@ -844,12 +861,12 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             yield return AccessTools.Method(typeof(Tab.WuDaoTooltip), "Show");
             yield return AccessTools.Method(typeof(WuDaoCellTooltip), "open");
             yield return AccessTools.Method(typeof(SiXuData), "Init");
-//            yield return AccessTools.Method(typeof(UIMiniTaskPanel), "RefreshUI");
-//            yield return AccessTools.Method(typeof(TaskDescManager), "setCurTaskDesc");
-//            yield return AccessTools.Method(typeof(TaskDescManager), "setCurTime");
-//            yield return AccessTools.Method(typeof(TaskDescManager), "setChuanWenWenTuo");
-//            yield return AccessTools.Method(typeof(TaskDescManager), "setChuanMiaoShu");
-//            yield return AccessTools.Method(typeof(TaskDescManager), "getShengYuShiJi");
+            //            yield return AccessTools.Method(typeof(UIMiniTaskPanel), "RefreshUI");
+            //            yield return AccessTools.Method(typeof(TaskDescManager), "setCurTaskDesc");
+            //            yield return AccessTools.Method(typeof(TaskDescManager), "setCurTime");
+            //            yield return AccessTools.Method(typeof(TaskDescManager), "setChuanWenWenTuo");
+            //            yield return AccessTools.Method(typeof(TaskDescManager), "setChuanMiaoShu");
+            //            yield return AccessTools.Method(typeof(TaskDescManager), "getShengYuShiJi");
             yield return AccessTools.Method(typeof(BiGuanYinfo), "getTaskNextTime");
             yield return AccessTools.Method(typeof(BiGuanYinfo), "Update");
             yield return AccessTools.Method(typeof(TaskCell), "getTaskNextTime");
@@ -865,19 +882,13 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             var codes = new List<CodeInstruction>(instructions);
             for (int i = 0; i < codes.Count - 1; i++)
             {
-                if (codes[i].opcode == OpCodes.Ldstr)
-                {
-                    Debug.Log("Trying to Translate : " + codes[i].operand.ToString());
-                }
+
 
                 if (codes[i].opcode == OpCodes.Ldstr && Main.translationDict.ContainsKey(codes[i].operand.ToString()))
                 {
-
                     codes[i].operand = Main.translationDict[codes[i].operand.ToString()];
-
-                    Debug.Log("Result : " + codes[i].operand.ToString());
                 }
-              
+
 
             }
             return codes.AsEnumerable();
@@ -936,11 +947,15 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                 // if (Main.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
                 if (Main.translationDict.ContainsKey(__result))
                 {
+
                     //     if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.translationDict[__result]}");
                     //        __result = Main.translationDict[__result];
+
+
                     __instance.str = Main.translationDict[__result];
 
                     //     if (Main.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
+
                 }
                 else
                 {
