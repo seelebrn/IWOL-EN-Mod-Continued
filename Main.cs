@@ -227,11 +227,14 @@ namespace EngTranslatorMod
             Debug.Log(BepInEx.Paths.PluginPath);
             string ExcludePattern1 = "^神秘铁剑[^¤].*$";
             string ExcludePattern2 = "^昔日身份[^¤].*$";
-            string ExcludePattern3 = "^魔道踪影[^¤].*$";
+            string ExcludePattern3 = "^魔道踪影[^¤].*$";          
             string ExcludePattern4 = "^御剑门之谜[^¤].*$";
             string ExcludePattern5 = "^往昔追忆开局¤.*$";
             string ExcludePattern6 = "^为神秘铁剑¤.*$";
             string ExcludePattern7 = "^神秘铁剑¤.*$";
+            string ExcludePattern8 = "^御剑门传闻.*$";
+            string ExcludePattern9 = "^御剑门倪家传闻¤.*$";
+            string ExcludePattern10 = "^剑门传闻¤.*$"; 
 
 
 
@@ -246,7 +249,7 @@ namespace EngTranslatorMod
                 if (arr[0] != arr[1])
                 {
                     var pair = new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
-                    if (!Regex.IsMatch(line, ExcludePattern1) && !Regex.IsMatch(line, ExcludePattern2) && !Regex.IsMatch(line, ExcludePattern3) && !Regex.IsMatch(line, ExcludePattern4) && !Regex.IsMatch(line, ExcludePattern5) && !Regex.IsMatch(line, ExcludePattern6) && !Regex.IsMatch(line, ExcludePattern7))
+                    if (!Regex.IsMatch(line, ExcludePattern1) && !Regex.IsMatch(line, ExcludePattern2) && !Regex.IsMatch(line, ExcludePattern3) && !Regex.IsMatch(line, ExcludePattern4) && !Regex.IsMatch(line, ExcludePattern5) && !Regex.IsMatch(line, ExcludePattern6) && !Regex.IsMatch(line, ExcludePattern7) && !Regex.IsMatch(line, ExcludePattern8) && !Regex.IsMatch(line, ExcludePattern9) && !Regex.IsMatch(line, ExcludePattern10))
                     {
                         if (!dict.ContainsKey(pair.Key))
                             dict.Add(pair.Key, pair.Value);
