@@ -20,6 +20,7 @@ using BepInEx.Logging;
 using Newtonsoft;
 using Newtonsoft.Json.Linq;
 
+
 namespace EngTranslatorMod
 {
     public class StripedWhiteSpaceCompare : IEqualityComparer<string>
@@ -82,6 +83,7 @@ namespace EngTranslatorMod
         public void Awake()
         {
             Debug.Log("Translator Kun is alive");
+            Debug.Log("Source Dir Check = " + Main.sourceDir);
         }
 
         public void LogCurrentSceneName()
@@ -177,6 +179,7 @@ namespace EngTranslatorMod
         public static bool enabledDebugLogging = false;
         public static StripedWhiteSpaceCompare comparer = new StripedWhiteSpaceCompare();
         public static Dictionary<string, string> translationDict;
+        public static string sourceDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).ToString();
 
         public static Dictionary<string, string> UILabelsDict;
         public static Dictionary<string, string> TextAssetDict;
@@ -224,7 +227,6 @@ namespace EngTranslatorMod
 
         public static Dictionary<string, string> FileToDictionary(string dir)
         {
-            Debug.Log(BepInEx.Paths.PluginPath);
             string ExcludePattern1 = "^神秘铁剑[^¤].*$";
             string ExcludePattern2 = "^昔日身份[^¤].*$";
             string ExcludePattern3 = "^魔道踪影[^¤].*$";          
@@ -240,7 +242,7 @@ namespace EngTranslatorMod
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
-            IEnumerable<string> lines = File.ReadLines(Path.Combine(BepInEx.Paths.PluginPath, "Translations", dir));
+            IEnumerable<string> lines = File.ReadLines(Path.Combine(sourceDir, "Translations", dir));
 
             foreach (string line in lines)
             {
