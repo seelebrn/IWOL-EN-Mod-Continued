@@ -19,6 +19,9 @@ using BepInEx;
 using BepInEx.Logging;
 using Newtonsoft;
 using Newtonsoft.Json.Linq;
+using XUnity.AutoTranslator.Plugin.BepInEx;
+
+
 
 
 namespace EngTranslatorMod
@@ -84,6 +87,8 @@ namespace EngTranslatorMod
         {
             Debug.Log("Translator Kun is alive");
             Debug.Log("Source Dir Check = " + Main.sourceDir);
+            Debug.Log("Parent Source Dir Check = " + Directory.GetParent(Main.sourceDir));
+ 
         }
 
         public void LogCurrentSceneName()
@@ -406,6 +411,17 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
 
 
 
+    }
+    [HarmonyPatch(typeof(XUnity.AutoTranslator.Plugin.BepInEx.AutoTranslatorPlugin), "TranslationPath", MethodType.Getter)]
+    static class XUnityTweaks
+    {
+        static void Postfix(XUnity.AutoTranslator.Plugin.BepInEx.AutoTranslatorPlugin __instance, ref string __result)
+        {
+
+            __result = Directory.GetParent(Main.sourceDir).ToString();
+            Debug.Log(__result);
+            
+        }
     }
 
     [HarmonyPatch(typeof(ChuanYingManager), "ReadData")]
@@ -1060,6 +1076,6 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
         }
 
     }
-
+  
 }
 
