@@ -88,6 +88,7 @@ namespace EngTranslatorMod
             Debug.Log("Translator Kun is alive");
             Debug.Log("Source Dir Check = " + Main.sourceDir);
             Debug.Log("Parent Source Dir Check = " + Directory.GetParent(Main.sourceDir));
+            Debug.Log("Source Config Dir Check" + Main.configDir);
  
         }
 
@@ -185,7 +186,8 @@ namespace EngTranslatorMod
         public static StripedWhiteSpaceCompare comparer = new StripedWhiteSpaceCompare();
         public static Dictionary<string, string> translationDict;
         public static string sourceDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).ToString();
-
+        public static string parentDir = Directory.GetParent(Main.sourceDir).ToString();
+        public static string configDir = Path.Combine(parentDir, "config");
         public static Dictionary<string, string> UILabelsDict;
         public static Dictionary<string, string> TextAssetDict;
         public static Dictionary<string, string> TextAssetDict1;
@@ -241,8 +243,7 @@ namespace EngTranslatorMod
             string ExcludePattern7 = "^神秘铁剑¤.*$";
             string ExcludePattern8 = "^御剑门传闻.*$";
             string ExcludePattern9 = "^御剑门倪家传闻¤.*$";
-            string ExcludePattern10 = "^剑门传闻¤.*$"; 
-
+            string ExcludePattern10 = "^(剑门传闻|英杰会冠军|英杰会冠军|拜入星河|突破筑基|御剑门金虹传闻|御剑门离火门传闻|御剑门竹山宗传闻|御剑门公孙家传闻|御剑门化尘传闻|突破金丹|拜入金虹|加入内门|宗门大比夺魁|猎魔冠军|结为道侣|拜入化尘|首次出海|龙族供奉|突破元婴|天机大比冠军|大道感悟|大道感悟|渡劫飞升)$";
 
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -256,7 +257,7 @@ namespace EngTranslatorMod
                 if (arr[0] != arr[1])
                 {
                     var pair = new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
-                    if (!Regex.IsMatch(line, ExcludePattern1) && !Regex.IsMatch(line, ExcludePattern2) && !Regex.IsMatch(line, ExcludePattern3) && !Regex.IsMatch(line, ExcludePattern4) && !Regex.IsMatch(line, ExcludePattern5) && !Regex.IsMatch(line, ExcludePattern6) && !Regex.IsMatch(line, ExcludePattern7) && !Regex.IsMatch(line, ExcludePattern8) && !Regex.IsMatch(line, ExcludePattern9) && !Regex.IsMatch(line, ExcludePattern10))
+                    if (!Regex.IsMatch(arr[0], ExcludePattern1) && !Regex.IsMatch(arr[0], ExcludePattern2) && !Regex.IsMatch(arr[0], ExcludePattern3) && !Regex.IsMatch(arr[0], ExcludePattern4) && !Regex.IsMatch(arr[0], ExcludePattern5) && !Regex.IsMatch(arr[0], ExcludePattern6) && !Regex.IsMatch(arr[0], ExcludePattern7) && !Regex.IsMatch(arr[0], ExcludePattern8) && !Regex.IsMatch(arr[0], ExcludePattern9) && !Regex.IsMatch(arr[0], ExcludePattern10))
                     {
                         if (!dict.ContainsKey(pair.Key))
                             dict.Add(pair.Key, pair.Value);
@@ -340,6 +341,7 @@ TextAssetDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                 FungusMenuDict = FileToDictionary("FungusMenu.txt");
 
                 translationDict = new Dictionary<string, string>().MergeLeft(TextAssetDict, UILabelsDict);
+                translationDict = new Dictionary<string, string>().MergeLeft(translationDict, FungusMenuDict);
                 /*
                                 File.WriteAllLines(
                 "C:\\Program Files (x86)\\Steam\\steamapps\\common\\觅长生\\BepInEx\\plugins\\TextAsset.txt",
@@ -412,8 +414,20 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
 
 
     }
+
+    [HarmonyPatch(typeof(XUnity.AutoTranslator.Plugin.BepInEx.AutoTranslatorPlugin), "ConfigPath", MethodType.Getter)]
+    static class XUnityTweaks1
+    {
+        static void Postfix(XUnity.AutoTranslator.Plugin.BepInEx.AutoTranslatorPlugin __instance, ref string __result)
+        {
+
+            __result = Main.configDir;
+            Debug.Log(__result);
+
+        }
+    }
     [HarmonyPatch(typeof(XUnity.AutoTranslator.Plugin.BepInEx.AutoTranslatorPlugin), "TranslationPath", MethodType.Getter)]
-    static class XUnityTweaks
+    static class XUnityTweaks2
     {
         static void Postfix(XUnity.AutoTranslator.Plugin.BepInEx.AutoTranslatorPlugin __instance, ref string __result)
         {
@@ -857,10 +871,35 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
         }
 
     }
+/*
+    [HarmonyPatch]
+    static class UIInput_ValidatePatch
+    {
+        // static AccessTools.FieldRef<UIInput, int> AllItemLeiXinRef =
+        // AccessTools.FieldRefAccess<jsonData, JObject>("AllItemLeiXin");
+        static IEnumerable<MethodBase> TargetMethods()
+        {
+            yield return AccessTools.Method(typeof(UIInput), "Validate", new Type[] { typeof(string )});
+            yield return AccessTools.Method(typeof(UIInput), "Validate", new Type[] {typeof(string), typeof(int), typeof(char)});
+            yield return AccessTools.Method(typeof(UIInput), "Insert");    
+
+        }
+
+        static void Postfix(UIInput __instance)
+        {
+            //var AllItemLeiXin = AllItemLeiXinRef(__instance);
+            Console.Write("Initial Character Limit = " + __instance.characterLimit);
+                __instance.characterLimit = 2;             
+        }
+
+
+        }
+*/
+    
 
     [HarmonyPatch]
 
-    static class ToolTipsMag_CreateShuXing
+    static class Transpiler1_patch
     {
         static IEnumerable<MethodBase> TargetMethods()
         {
@@ -878,16 +917,39 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             yield return AccessTools.Method(typeof(DanYaoInfoPanel), "RefreshPanelData");
             yield return AccessTools.Method(typeof(GongFaInfoPanel), "RefreshPanelData");
             yield return AccessTools.Method(typeof(MiShuInfoPanel), "RefreshPanelData");
+       
+
+        }
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            var codes = new List<CodeInstruction>(instructions);
+            for (int i = 0; i < codes.Count - 1; i++)
+            {
+
+
+                if (codes[i].opcode == OpCodes.Ldstr && Main.translationDict.ContainsKey(codes[i].operand.ToString()))
+                {
+                    codes[i].operand = Main.translationDict[codes[i].operand.ToString()];
+                }
+
+
+            }
+            return codes.AsEnumerable();
+
+
+        }
+    }
+
+    [HarmonyPatch]
+
+    static class Transpiler2_patch
+    {
+        static IEnumerable<MethodBase> TargetMethods()
+        {
             yield return AccessTools.Method(typeof(item), "StudyTiaoJian");
-            yield return AccessTools.Method(typeof(Tab.WuDaoTooltip), "Show");
+            yield return AccessTools.Method(typeof(Tab.WuDaoTooltip), "Show", new Type[] {typeof(Sprite), typeof(int), typeof(UnityAction)});
             yield return AccessTools.Method(typeof(WuDaoCellTooltip), "open");
             yield return AccessTools.Method(typeof(SiXuData), "Init");
-            //            yield return AccessTools.Method(typeof(UIMiniTaskPanel), "RefreshUI");
-            //            yield return AccessTools.Method(typeof(TaskDescManager), "setCurTaskDesc");
-            //            yield return AccessTools.Method(typeof(TaskDescManager), "setCurTime");
-            //            yield return AccessTools.Method(typeof(TaskDescManager), "setChuanWenWenTuo");
-            //            yield return AccessTools.Method(typeof(TaskDescManager), "setChuanMiaoShu");
-            //            yield return AccessTools.Method(typeof(TaskDescManager), "getShengYuShiJi");
             yield return AccessTools.Method(typeof(BiGuanYinfo), "getTaskNextTime");
             yield return AccessTools.Method(typeof(BiGuanYinfo), "Update");
             yield return AccessTools.Method(typeof(TaskCell), "getTaskNextTime");
@@ -895,7 +957,10 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             yield return AccessTools.Method(typeof(UIBiGuanPanel), "RefreshKeFangTime");
             yield return AccessTools.Method(typeof(Tools), "getStr");
             yield return AccessTools.Method(typeof(UIBiGuanXiuLianPanel), "RefreshSpeedUI");
-
+            yield return AccessTools.Method(typeof(createAvatarChoice), "setValue");
+            yield return AccessTools.Method(typeof(createTianfu), "Awake");
+            yield return AccessTools.Method(typeof(MainUISelectTianFu), "NextPage");
+            yield return AccessTools.Method(typeof(Bag.DanLuBag), "GetQualityData");
 
         }
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
