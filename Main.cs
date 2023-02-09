@@ -243,8 +243,8 @@ namespace EngTranslatorMod
             string ExcludePattern7 = "^神秘铁剑¤.*$";
             string ExcludePattern8 = "^御剑门传闻.*$";
             string ExcludePattern9 = "^御剑门倪家传闻¤.*$";
-            string ExcludePattern10 = "^(剑门传闻|英杰会冠军|英杰会冠军|拜入星河|突破筑基|御剑门金虹传闻|御剑门离火门传闻|御剑门竹山宗传闻|御剑门公孙家传闻|御剑门化尘传闻|突破金丹|拜入金虹|加入内门|宗门大比夺魁|猎魔冠军|结为道侣|拜入化尘|首次出海|龙族供奉|突破元婴|天机大比冠军|大道感悟|大道感悟|渡劫飞升)$";
-
+            string ExcludePattern10 = "^(剑门传闻|英杰会冠军|英杰会冠军|拜入星河|突破筑基|御剑门金虹传闻|御剑门离火门传闻|御剑门竹山宗传闻|御剑门公孙家传闻|御剑门化尘传闻|突破金丹|拜入金虹|加入内门|宗门大比夺魁|猎魔冠军|结为道侣|拜入化尘|首次出海|龙族供奉|突破元婴|天机大比冠军|大道感悟|大道感悟|渡劫飞升|天道福泽|逆天造化)$";
+            string ExcludePattern11 = "^(神秘铁剑|神秘铁剑杀戮剑灵|神秘铁剑天魔眼|神秘铁剑戮仙剑|神秘铁剑天道树|往昔追忆开局|昔日身份异常剑灵|昔日身份御剑门|昔日身份古迹|昔日身份玄清|昔日身份戮仙剑|魔道踪影天魔道一|魔道踪影天魔道二|魔道踪影天魔道三|魔道踪影天魔道四|魔道踪影古神教一|魔道踪影古神教二|魔道踪影古神教三|魔道踪影古神教四|魔道踪影血剑宫初|魔道踪影血剑宫一|魔道踪影血剑宫二|魔道踪影血煞符|御剑门传闻|御剑门倪家传闻|御剑门公孙家传闻|御剑门竹山宗传闻|御剑门离火门传闻|御剑门金虹传闻|御剑门星河传闻|御剑门化尘传闻|御剑门之战真相)$";
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
@@ -257,7 +257,7 @@ namespace EngTranslatorMod
                 if (arr[0] != arr[1])
                 {
                     var pair = new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
-                    if (!Regex.IsMatch(arr[0], ExcludePattern1) && !Regex.IsMatch(arr[0], ExcludePattern2) && !Regex.IsMatch(arr[0], ExcludePattern3) && !Regex.IsMatch(arr[0], ExcludePattern4) && !Regex.IsMatch(arr[0], ExcludePattern5) && !Regex.IsMatch(arr[0], ExcludePattern6) && !Regex.IsMatch(arr[0], ExcludePattern7) && !Regex.IsMatch(arr[0], ExcludePattern8) && !Regex.IsMatch(arr[0], ExcludePattern9) && !Regex.IsMatch(arr[0], ExcludePattern10))
+                    if (!Regex.IsMatch(arr[0], ExcludePattern1) && !Regex.IsMatch(arr[0], ExcludePattern2) && !Regex.IsMatch(arr[0], ExcludePattern3) && !Regex.IsMatch(arr[0], ExcludePattern4) && !Regex.IsMatch(arr[0], ExcludePattern5) && !Regex.IsMatch(arr[0], ExcludePattern6) && !Regex.IsMatch(arr[0], ExcludePattern7) && !Regex.IsMatch(arr[0], ExcludePattern8) && !Regex.IsMatch(arr[0], ExcludePattern9) && !Regex.IsMatch(arr[0], ExcludePattern10) && !Regex.IsMatch(arr[0], ExcludePattern11))
                     {
                         if (!dict.ContainsKey(pair.Key))
                             dict.Add(pair.Key, pair.Value);
