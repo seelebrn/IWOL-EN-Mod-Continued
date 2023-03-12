@@ -20,9 +20,9 @@ using BepInEx.Logging;
 using Newtonsoft;
 using Newtonsoft.Json.Linq;
 using XUnity.AutoTranslator.Plugin.BepInEx;
-
-
-
+using script.NewLianDan.LianDan;
+using CaiJi;
+using YSGame.EquipRandom;
 
 namespace EngTranslatorMod
 {
@@ -915,17 +915,15 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             yield return AccessTools.Method(typeof(ToolTipsMag), "CreateShuXing", new Type[] { typeof(Bag.BaseItem) });
             yield return AccessTools.Method(typeof(Bag.BaseSkill), "GetPinJieName");
             yield return AccessTools.Method(typeof(Bag.BaseSkill), "GetPinJie");
-            yield return AccessTools.Method(typeof(YaoShouCaiLiaoInfoPanel), "RefreshPanelData");
             yield return AccessTools.Method(typeof(Skill_UIST), "Show_Tooltip");
             yield return AccessTools.Method(typeof(ShenTongInfoPanel), "RefreshPanelData");
             yield return AccessTools.Method(typeof(KuangShiInfoPanel), "RefreshPanelData");
             yield return AccessTools.Method(typeof(CaoYaoInfoPanel), "RefreshPanelData");
             yield return AccessTools.Method(typeof(YaoShouInfoPanel), "RefreshPanelData");
-            yield return AccessTools.Method(typeof(YaoShouCaiLiaoInfoPanel), "RefreshPanelData");
             yield return AccessTools.Method(typeof(DanYaoInfoPanel), "RefreshPanelData");
             yield return AccessTools.Method(typeof(GongFaInfoPanel), "RefreshPanelData");
             yield return AccessTools.Method(typeof(MiShuInfoPanel), "RefreshPanelData");
-
+            yield return AccessTools.Method(typeof(YaoShouCaiLiaoInfoPanel), "RefreshPanelData");
 
         }
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -969,6 +967,26 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             yield return AccessTools.Method(typeof(createTianfu), "Awake");
             yield return AccessTools.Method(typeof(MainUISelectTianFu), "NextPage");
             yield return AccessTools.Method(typeof(Bag.DanLuBag), "GetQualityData");
+            yield return AccessTools.Method(typeof(LianDanPanel), "GetCostTime");
+            yield return AccessTools.Method(typeof(LianDanResultManager), "getCostTime");
+            yield return AccessTools.Method(typeof(LianQiController), "GetItemDesc");
+            yield return AccessTools.Method(typeof(Tools), "TimeToShengYuTime");
+            yield return AccessTools.Method(typeof(PaiMaiHang), "JiMai");
+            yield return AccessTools.Method(typeof(UIMiniTaskPanel), "RefreshChuanWen");
+            yield return AccessTools.Method(typeof(XiuLian), "Update");
+            yield return AccessTools.Method(typeof(NPCEx), "AddFavor");
+            yield return AccessTools.Method(typeof(LingHeCaiJiUIMag), "OpenCaiJi");
+            yield return AccessTools.Method(typeof(showCaiLiaoImage), "Click");
+            yield return AccessTools.Method(typeof(JianLingManager), "UnlockXianSuo");
+            yield return AccessTools.Method(typeof(ShowEquipCell), "getEquipDesc");
+            yield return AccessTools.Method(typeof(YSGame.EquipRandom.RandomEquip), "GetEquipQualityDesc");
+            yield return AccessTools.Method(typeof(ShowEquipCell), "setEquipPingJie");
+            yield return AccessTools.Method(typeof(UIJianLingQingJiaoPanel), "Refresh");
+
+
+
+
+
 
         }
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
