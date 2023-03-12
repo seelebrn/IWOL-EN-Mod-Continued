@@ -57,6 +57,14 @@ namespace EngTranslatorMod
         {
             return cjkCharRegex.IsMatch(s);
         }
+        public static string CustomEscape(string s)
+        {
+            return s.Replace("\n", "\\n").Replace("\r", "\\r").Replace("\t", "\\t");
+        }
+        public static string CustomUnescape(string s)
+        {
+            return s.Replace("\\n", "\n").Replace("\\r", "\r").Replace("\\t", "\t");
+        }
     }
 
 
@@ -503,15 +511,15 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             try
             {
                 if (Main.enabledDebugLogging) Debug.Log($"Trying to translate: {storyText}");
-                if (Main.FungusSayDict.ContainsKey(storyText))
+                if (Main.FungusSayDict.ContainsKey(Helpers.CustomEscape(storyText)))
                 {
-                    if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.FungusSayDict[storyText]}");
-                    storyTextRef(__instance) = Main.FungusSayDict[storyText];
+                    if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.FungusSayDict[Helpers.CustomEscape(storyText)]}");
+                    storyTextRef(__instance) = Helpers.CustomUnescape(Main.FungusSayDict[Helpers.CustomEscape(storyText)]);
                     if (Main.enabledDebugLogging) Debug.Log($"Updated String: {storyTextRef(__instance)}");
                 }
                 else
                 {
-                    Main.AddFailedStringToDict(storyText, " Say_OnEnter_Patch");
+                    Main.AddFailedStringToDict(Helpers.CustomEscape(storyText), " Say_OnEnter_Patch");
                 }
 
             }
