@@ -242,18 +242,7 @@ namespace EngTranslatorMod
 
         public static Dictionary<string, string> FileToDictionary(string dir)
         {
-            string ExcludePattern1 = "^神秘铁剑.*$";
-            string ExcludePattern2 = "^昔日身份.*$";
-            string ExcludePattern3 = "^魔道踪影.*$";
-            string ExcludePattern4 = "^御剑门之谜.*$";
-            string ExcludePattern5 = "^往昔追忆开局$";
-            string ExcludePattern6 = "^为神秘铁剑$";
-            string ExcludePattern7 = "^神秘铁剑$";
-            string ExcludePattern8 = "^御剑门传闻$";
-            string ExcludePattern9 = "^御剑门倪家传闻$";
-            string ExcludePattern10 = "^(剑门传闻|英杰会冠军|英杰会冠军|拜入星河|突破筑基|御剑门金虹传闻|御剑门离火门传闻|御剑门竹山宗传闻|御剑门公孙家传闻|御剑门化尘传闻|突破金丹|拜入金虹|加入内门|宗门大比夺魁|猎魔冠军|结为道侣|拜入化尘|首次出海|龙族供奉|突破元婴|天机大比冠军|大道感悟|大道感悟|渡劫飞升|天道福泽|逆天造化)$";
-            string ExcludePattern11 = "^(神秘铁剑|神秘铁剑杀戮剑灵|神秘铁剑天魔眼|神秘铁剑戮仙剑|神秘铁剑天道树|往昔追忆开局|昔日身份异常剑灵|昔日身份御剑门|昔日身份古迹|昔日身份玄清|昔日身份戮仙剑|魔道踪影天魔道一|魔道踪影天魔道二|魔道踪影天魔道三|魔道踪影天魔道四|魔道踪影古神教一|魔道踪影古神教二|魔道踪影古神教三|魔道踪影古神教四|魔道踪影血剑宫初|魔道踪影血剑宫一|魔道踪影血剑宫二|魔道踪影血煞符|御剑门传闻|御剑门倪家传闻|御剑门公孙家传闻|御剑门竹山宗传闻|御剑门离火门传闻|御剑门金虹传闻|御剑门星河传闻|御剑门化尘传闻|御剑门之战真相)$";
-            string ExcludePattern12 = "^(资质|灵根|天道化身|悟性|遁速|神识|心境|灵石|气血|寿元|灵感|丹毒|神秘铁剑|神秘铁剑杀戮剑灵|神秘铁剑天魔眼|神秘铁剑戮仙剑|神秘铁剑天道树|往昔追忆开局|昔日身份异常剑灵|昔日身份御剑门|昔日身份古迹|昔日身份玄清|昔日身份戮仙剑|魔道踪影天魔道一|魔道踪影天魔道二|魔道踪影天魔道三|魔道踪影天魔道四|魔道踪影古神教一|魔道踪影古神教二|魔道踪影古神教三|魔道踪影古神教四|魔道踪影血剑宫初|魔道踪影血剑宫一|魔道踪影血剑宫二|魔道踪影血煞符|御剑门传闻|御剑门倪家传闻|御剑门公孙家传闻|御剑门竹山宗传闻|御剑门离火门传闻|御剑门金虹传闻|御剑门星河传闻|御剑门化尘传闻|御剑门之战真相|自定义生平|突破筑基|突破金丹|突破元婴|突破化神|渡劫飞升|拜入竹山|拜入离火|拜入金虹|拜入星河|拜入化尘|英杰会冠军|天机大比冠军|宗门大比夺魁|五行剑诀传承|登仙殿传承|击败九幽|击败浪方|击败吞云|请教吞云|阴魂岛见证|加入内门|结为道侣|疏远毕业|拉住师尊|任他离开|猎魔冠军|首次出海|龙族供奉|通天灵宝|大道感悟|白帝飞升|天字杀手|特殊飞升见证|普通飞升见证|特殊陨落见证|普通陨落见证)$";
+
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
             IEnumerable<string> lines = File.ReadLines(Path.Combine(sourceDir, "Translations", dir));
@@ -265,17 +254,12 @@ namespace EngTranslatorMod
                 if (arr[0] != arr[1])
                 {
                     var pair = new KeyValuePair<string, string>(Regex.Replace(arr[0], @"\t|\n|\r", ""), arr[1]);
-                    if (!Regex.IsMatch(arr[0], ExcludePattern1) && !Regex.IsMatch(arr[0], ExcludePattern2) && !Regex.IsMatch(arr[0], ExcludePattern3) && !Regex.IsMatch(arr[0], ExcludePattern4) && !Regex.IsMatch(arr[0], ExcludePattern5) && !Regex.IsMatch(arr[0], ExcludePattern6) && !Regex.IsMatch(arr[0], ExcludePattern7) && !Regex.IsMatch(arr[0], ExcludePattern8) && !Regex.IsMatch(arr[0], ExcludePattern9) && !Regex.IsMatch(arr[0], ExcludePattern10) && !Regex.IsMatch(arr[0], ExcludePattern11) && !Regex.IsMatch(arr[0], ExcludePattern12))
-                    {
-                        if (!dict.ContainsKey(pair.Key))
+
+                    if (!dict.ContainsKey(pair.Key))
                             dict.Add(pair.Key, pair.Value);
                         else
                             Debug.Log($"Found a duplicated line while parsing {dir}: {pair.Key}");
-                    }
-                    else
-                    {
-                        Debug.Log("Not touching this with a 10ft pole : " + arr[0] + " - Translation would be : " + arr[1]);
-                    }
+
                 }
             }
 
@@ -1059,12 +1043,31 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                 // if (Main.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
                 if (Main.translationDict.ContainsKey(__result))
                 {
+                    string ExcludePattern1 = "^神秘铁剑.*$";
+                    string ExcludePattern2 = "^昔日身份.*$";
+                    string ExcludePattern3 = "^魔道踪影.*$";
+                    string ExcludePattern4 = "^御剑门之谜.*$";
+                    string ExcludePattern5 = "^往昔追忆开局$";
+                    string ExcludePattern6 = "^为神秘铁剑$";
+                    string ExcludePattern7 = "^神秘铁剑$";
+                    string ExcludePattern8 = "^御剑门传闻$";
+                    string ExcludePattern9 = "^御剑门倪家传闻$";
+                    string ExcludePattern10 = "^(剑门传闻|英杰会冠军|英杰会冠军|拜入星河|突破筑基|御剑门金虹传闻|御剑门离火门传闻|御剑门竹山宗传闻|御剑门公孙家传闻|御剑门化尘传闻|突破金丹|拜入金虹|加入内门|宗门大比夺魁|猎魔冠军|结为道侣|拜入化尘|首次出海|龙族供奉|突破元婴|天机大比冠军|大道感悟|大道感悟|渡劫飞升|天道福泽|逆天造化)$";
+                    string ExcludePattern11 = "^(神秘铁剑|神秘铁剑杀戮剑灵|神秘铁剑天魔眼|神秘铁剑戮仙剑|神秘铁剑天道树|往昔追忆开局|昔日身份异常剑灵|昔日身份御剑门|昔日身份古迹|昔日身份玄清|昔日身份戮仙剑|魔道踪影天魔道一|魔道踪影天魔道二|魔道踪影天魔道三|魔道踪影天魔道四|魔道踪影古神教一|魔道踪影古神教二|魔道踪影古神教三|魔道踪影古神教四|魔道踪影血剑宫初|魔道踪影血剑宫一|魔道踪影血剑宫二|魔道踪影血煞符|御剑门传闻|御剑门倪家传闻|御剑门公孙家传闻|御剑门竹山宗传闻|御剑门离火门传闻|御剑门金虹传闻|御剑门星河传闻|御剑门化尘传闻|御剑门之战真相)$";
+                    string ExcludePattern12 = "^(资质|灵根|天道化身|悟性|遁速|神识|心境|灵石|气血|寿元|灵感|丹毒|神秘铁剑|神秘铁剑杀戮剑灵|神秘铁剑天魔眼|神秘铁剑戮仙剑|神秘铁剑天道树|往昔追忆开局|昔日身份异常剑灵|昔日身份御剑门|昔日身份古迹|昔日身份玄清|昔日身份戮仙剑|魔道踪影天魔道一|魔道踪影天魔道二|魔道踪影天魔道三|魔道踪影天魔道四|魔道踪影古神教一|魔道踪影古神教二|魔道踪影古神教三|魔道踪影古神教四|魔道踪影血剑宫初|魔道踪影血剑宫一|魔道踪影血剑宫二|魔道踪影血煞符|御剑门传闻|御剑门倪家传闻|御剑门公孙家传闻|御剑门竹山宗传闻|御剑门离火门传闻|御剑门金虹传闻|御剑门星河传闻|御剑门化尘传闻|御剑门之战真相|自定义生平|突破筑基|突破金丹|突破元婴|突破化神|渡劫飞升|拜入竹山|拜入离火|拜入金虹|拜入星河|拜入化尘|英杰会冠军|天机大比冠军|宗门大比夺魁|五行剑诀传承|登仙殿传承|击败九幽|击败浪方|击败吞云|请教吞云|阴魂岛见证|加入内门|结为道侣|疏远毕业|拉住师尊|任他离开|猎魔冠军|首次出海|龙族供奉|通天灵宝|大道感悟|白帝飞升|天字杀手|特殊飞升见证|普通飞升见证|特殊陨落见证|普通陨落见证)$";
+                    if (!Regex.IsMatch(__result, ExcludePattern1) && !Regex.IsMatch(__result, ExcludePattern2) && !Regex.IsMatch(__result, ExcludePattern3) && !Regex.IsMatch(__result, ExcludePattern4) && !Regex.IsMatch(__result, ExcludePattern5) && !Regex.IsMatch(__result, ExcludePattern6) && !Regex.IsMatch(__result, ExcludePattern7) && !Regex.IsMatch(__result, ExcludePattern8) && !Regex.IsMatch(__result, ExcludePattern9) && !Regex.IsMatch(__result, ExcludePattern10) && !Regex.IsMatch(__result, ExcludePattern11) && !Regex.IsMatch(__result, ExcludePattern12))
+                    {
+                        __instance.str = Main.translationDict[__result];
 
+                    }
+                    else
+                    {
+                        Debug.Log("Not touching this with a 10ft pole : " + __result + " - Translation would be : " + Main.translationDict[__result]);
+                    }
                     //     if (Main.enabledDebugLogging) Debug.Log($"Found matching string!: {Main.translationDict[__result]}");
                     //        __result = Main.translationDict[__result];
 
 
-                    __instance.str = Main.translationDict[__result];
 
                     //     if (Main.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
 
