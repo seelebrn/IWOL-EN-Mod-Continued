@@ -44,7 +44,6 @@ namespace EngTranslatorMod.Main
         public const string pluginGuid = "Cadenza.IWOL.EnMod";
         public const string pluginName = "ENMod Continued";
         public const string pluginVersion = "0.6";
-        public static bool enabledDebugLogging = false;
         public static StripedWhiteSpaceCompare comparer = new StripedWhiteSpaceCompare();
         public static string sourceDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).ToString();
         public static string parentDir = Directory.GetParent(sourceDir).ToString();
@@ -77,15 +76,11 @@ namespace EngTranslatorMod.Main
 
         public static void AddFailedStringToDict(string s, string location)
         {
-
-
             if (FailedStringsDict.ContainsKey(s))
             {
-
                 return;
             }
             FailedStringsDict.Add(s, location);
-
         }
 
         public static Dictionary<string, string> FileToDictionary(string dir)

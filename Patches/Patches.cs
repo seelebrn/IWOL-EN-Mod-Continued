@@ -20,6 +20,7 @@ using XUnity.AutoTranslator.Plugin.BepInEx;
 using YSGame.EquipRandom;
 using YSGame.TuJian;
 using UnityModularTranslator.Translation;
+using UnityModularTranslator;
 
 namespace EngTranslatorMod.Patches
 {
@@ -30,10 +31,8 @@ namespace EngTranslatorMod.Patches
         {
             static void Postfix(AutoTranslatorPlugin __instance, ref string __result)
             {
-
                 __result = MainScript.configDir;
-                Debug.Log(__result);
-
+                UMTLogger.Log(__result);
             }
         }
         [HarmonyPatch(typeof(AutoTranslatorPlugin), "TranslationPath", MethodType.Getter)]
@@ -41,10 +40,8 @@ namespace EngTranslatorMod.Patches
         {
             static void Postfix(AutoTranslatorPlugin __instance, ref string __result)
             {
-
                 __result = Directory.GetParent(MainScript.sourceDir).ToString();
-                Debug.Log(__result);
-
+                UMTLogger.Log(__result);
             }
         }
 
@@ -55,10 +52,10 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {obj["info"].str}");
+                    UMTLogger.Log($"Trying to translate: {obj["info"].str}");
                     if (Translator.TryGetTranslation(obj["info"].str, out string translation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        UMTLogger.Log($"Found matching string!: {translation}");
                         obj["info"].str = translation;
                     }
                     else
@@ -68,7 +65,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
             }
         }
@@ -81,10 +78,10 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {msg}");
+                    UMTLogger.Log($"Trying to translate: {msg}");
                     if (Translator.TryGetTranslation(msg, out string translation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        UMTLogger.Log($"Found matching string!: {translation}");
                         msg = translation;
                     }
                     else
@@ -94,7 +91,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
             }
         }
@@ -111,12 +108,12 @@ namespace EngTranslatorMod.Patches
                 string storyText = storyTextRef(__instance);
                 try
                 {
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {storyText}");
+                    UMTLogger.Log($"Trying to translate: {storyText}");
                     if (MainScript.FungusSayDict.ContainsKey(Helpers.CustomEscape(storyText)))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.FungusSayDict[Helpers.CustomEscape(storyText)]}");
+                        UMTLogger.Log($"Found matching string!: {MainScript.FungusSayDict[Helpers.CustomEscape(storyText)]}");
                         storyTextRef(__instance) = Helpers.CustomUnescape(MainScript.FungusSayDict[Helpers.CustomEscape(storyText)]);
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {storyTextRef(__instance)}");
+                        UMTLogger.Log($"Updated String: {storyTextRef(__instance)}");
                     }
                     else
                     {
@@ -126,7 +123,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
             }
         }
@@ -139,12 +136,12 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {input}");
+                    UMTLogger.Log($"Trying to translate: {input}");
                     if (Translator.TryGetTranslation(input, out string translation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        UMTLogger.Log($"Found matching string!: {translation}");
                         input = translation;
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {input}");
+                        UMTLogger.Log($"Updated String: {input}");
                     }
                     else
                     {
@@ -153,7 +150,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
             }
         }
@@ -167,21 +164,21 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                    UMTLogger.Log($"Trying to translate: {__result}");
                     if (Translator.TryGetTranslation(__result, out string translation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        UMTLogger.Log($"Found matching string!: {translation}");
                         __result = translation;
                     }
                     else
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                        UMTLogger.Log($"Trying to translate: {__result}");
                         MainScript.AddFailedStringToDict(__result, " Tools_Code64ToString_Patch");
                     }
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
             }
         }
@@ -193,21 +190,21 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                    UMTLogger.Log($"Trying to translate: {__result}");
                     if (Translator.TryGetTranslation(__result, out string translation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        UMTLogger.Log($"Found matching string!: {translation}");
                         __result = translation;
                     }
                     else
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                        UMTLogger.Log($"Trying to translate: {__result}");
                         MainScript.AddFailedStringToDict(__result, " Tools_Code64ToString_Patch");
                     }
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
             }
         }
@@ -220,12 +217,12 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {desstr}");
+                    UMTLogger.Log($"Trying to translate: {desstr}");
                     if (Translator.TryGetTranslation(desstr, out string translation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        UMTLogger.Log($"Found matching string!: {translation}");
                         desstr = translation;
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {desstr}");
+                        UMTLogger.Log($"Updated String: {desstr}");
                     }
                     else
                     {
@@ -234,7 +231,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
             }
         }
@@ -248,24 +245,24 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__instance.skill_Name}");
+                    UMTLogger.Log($"Trying to translate: {__instance.skill_Name}");
                     if (Translator.TryGetTranslation(__instance.skill_Name, out string skillNameTranslation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {skillNameTranslation}");
+                        UMTLogger.Log($"Found matching string!: {skillNameTranslation}");
                         __instance.skill_Name = skillNameTranslation;
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__instance.skill_Name}");
+                        UMTLogger.Log($"Updated String: {__instance.skill_Name}");
                     }
                     else
                     {
                         MainScript.AddFailedStringToDict(__instance.skill_Name, " Tools_skillInit_Patch");
                     }
 
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__instance.skill_Desc}");
+                    UMTLogger.Log($"Trying to translate: {__instance.skill_Desc}");
                     if (Translator.TryGetTranslation(__instance.skill_Desc, out string skillDescTranslation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {skillDescTranslation}");
+                        UMTLogger.Log($"Found matching string!: {skillDescTranslation}");
                         __instance.skill_Desc = skillDescTranslation;
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__instance.skill_Desc}");
+                        UMTLogger.Log($"Updated String: {__instance.skill_Desc}");
                     }
                     else
                     {
@@ -274,7 +271,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
             }
         }
@@ -288,24 +285,24 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__instance.skill_Name}");
+                    UMTLogger.Log($"Trying to translate: {__instance.skill_Name}");
                     if (Translator.TryGetTranslation(__instance.skill_Name, out string skillNameTranslation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {skillNameTranslation}");
+                        UMTLogger.Log($"Found matching string!: {skillNameTranslation}");
                         __instance.skill_Name = skillNameTranslation;
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__instance.skill_Name}");
+                        UMTLogger.Log($"Updated String: {__instance.skill_Name}");
                     }
                     else
                     {
                         MainScript.AddFailedStringToDict(__instance.skill_Name, " initStaticSkill");
                     }
 
-                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__instance.skill_Desc}");
+                    UMTLogger.Log($"Trying to translate: {__instance.skill_Desc}");
                     if (Translator.TryGetTranslation(__instance.skill_Desc, out string skillDescTranslation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {skillDescTranslation}");
+                        UMTLogger.Log($"Found matching string!: {skillDescTranslation}");
                         __instance.skill_Desc = skillDescTranslation;
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__instance.skill_Desc}");
+                        UMTLogger.Log($"Updated String: {__instance.skill_Desc}");
                     }
                     else
                     {
@@ -314,7 +311,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
 
             }
@@ -350,7 +347,7 @@ namespace EngTranslatorMod.Patches
 
                         foreach (KeyValuePair<string, string> kvp in dict)
                         {
-                            if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {kvp.Value}");
+                            UMTLogger.Log($"Trying to translate: {kvp.Value}");
                             if (Translator.TryGetTranslation(kvp.Value, out string valueTranslation))
                             {
                                 mergeDict[kvp.Key] = valueTranslation;
@@ -370,7 +367,7 @@ namespace EngTranslatorMod.Patches
                         Dictionary<int, string> mergeDict = new Dictionary<int, string>();
                         foreach (KeyValuePair<int, string> kvp in dict)
                         {
-                            if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {kvp.Value}");
+                            UMTLogger.Log($"Trying to translate: {kvp.Value}");
                             if (Translator.TryGetTranslation(kvp.Value, out string valueTranslation))
                             {
                                 mergeDict[kvp.Key] = valueTranslation;
@@ -403,7 +400,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
 
             }
@@ -417,12 +414,12 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    //              if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {desc}");
+                    //              UMTLogger.Log($"Trying to translate: {desc}");
                     if (Translator.TryGetTranslation(desc, out string descTranslation))
                     {
-                        //                 if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[desc]}");
+                        //                 UMTLogger.Log($"Found matching string!: {MainScript.translationDict[desc]}");
                         desc = descTranslation;
-                        //                  if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {desc}");
+                        //                  UMTLogger.Log($"Updated String: {desc}");
                     }
                     else
                     {
@@ -431,7 +428,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
 
             }
@@ -467,7 +464,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
 
 
@@ -664,17 +661,17 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    // if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                    // UMTLogger.Log($"Trying to translate: {__result}");
                     if (Translator.TryGetTranslation(__result, out string translation))
                     {
 
-                        //     if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[__result]}");
+                        //     UMTLogger.Log($"Found matching string!: {MainScript.translationDict[__result]}");
                         //        __result = MainScript.translationDict[__result];
 
 
                         __instance.str = translation;
 
-                        //     if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
+                        //     UMTLogger.Log($"Updated String: {__result}");
 
                     }
                     else
@@ -708,21 +705,21 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
             }
             static void Postfix(ref string __result)
             {
                 try
                 {
-                    // if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                    // UMTLogger.Log($"Trying to translate: {__result}");
                     if (Translator.TryGetTranslation(__result, out string translation))
                     {
-                        //     if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[__result]}");
+                        //     UMTLogger.Log($"Found matching string!: {MainScript.translationDict[__result]}");
                         __result = translation;
                         //__instance.str = MainScript.translationDict[__result];
 
-                        //     if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
+                        //     UMTLogger.Log($"Updated String: {__result}");
                     }
                     else
                     {
@@ -731,7 +728,7 @@ namespace EngTranslatorMod.Patches
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e.ToString());
+                    UMTLogger.Log(e.ToString());
                 }
             }
 
