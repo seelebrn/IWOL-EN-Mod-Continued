@@ -35,6 +35,7 @@ namespace EngTranslatorMod.Patches
                 UMTLogger.Log(__result);
             }
         }
+
         [HarmonyPatch(typeof(AutoTranslatorPlugin), "TranslationPath", MethodType.Getter)]
         static class XUnityTweaks2
         {
@@ -50,21 +51,14 @@ namespace EngTranslatorMod.Patches
         {
             static void Prefix(ref JSONObject obj)
             {
-                try
+                if (Translator.TryGetTranslation(obj["info"].str, out string translation))
                 {
-                    if (Translator.TryGetTranslation(obj["info"].str, out string translation))
-                    {
-                        UMTLogger.Log($"Found matching string!: {translation}");
-                        obj["info"].str = translation;
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(obj["info"].str, "ChuanYingManager_ReadData_Patch");
-                    }
+                    UMTLogger.Log($"Found matching string!: {translation}");
+                    obj["info"].str = translation;
                 }
-                catch (Exception e)
+                else
                 {
-                    UMTLogger.Log(e.ToString());
+                    MainScript.AddFailedStringToDict(obj["info"].str, "ChuanYingManager_ReadData_Patch");
                 }
             }
         }
@@ -75,21 +69,14 @@ namespace EngTranslatorMod.Patches
         {
             static void Prefix(ref string msg, EmailData emailData)
             {
-                try
+                if (Translator.TryGetTranslation(msg, out string translation))
                 {
-                    if (Translator.TryGetTranslation(msg, out string translation))
-                    {
-                        UMTLogger.Log($"Found matching string!: {translation}");
-                        msg = translation;
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(msg, " CyEmailr_GetContent");
-                    }
+                    UMTLogger.Log($"Found matching string!: {translation}");
+                    msg = translation;
                 }
-                catch (Exception e)
+                else
                 {
-                    UMTLogger.Log(e.ToString());
+                    MainScript.AddFailedStringToDict(msg, "CyEmailr_GetContent");
                 }
             }
         }
@@ -100,26 +87,20 @@ namespace EngTranslatorMod.Patches
         static class Say_OnEnter_Patch_01
         {
             static AccessTools.FieldRef<Say, string> storyTextRef =
-            AccessTools.FieldRefAccess<Say, string>("storyText");
+                AccessTools.FieldRefAccess<Say, string>("storyText");
+
             static void Prefix(Say __instance)
             {
                 string storyText = storyTextRef(__instance);
-                try
+                if (Translator.TryGetTranslation(Helpers.CustomEscape(storyText), out string translatedText))
                 {
-                    if (Translator.TryGetTranslation(Helpers.CustomEscape(storyText), out string translatedText))
-                    {
-                        UMTLogger.Log($"Found matching string!: {translatedText}");
-                        storyTextRef(__instance) = Helpers.CustomUnescape(translatedText);
-                        UMTLogger.Log($"Updated String: {storyTextRef(__instance)}");
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(Helpers.CustomEscape(storyText), " Say_OnEnter_Patch");
-                    }
+                    UMTLogger.Log($"Found matching string!: {translatedText}");
+                    storyTextRef(__instance) = Helpers.CustomUnescape(translatedText);
+                    UMTLogger.Log($"Updated String: {storyTextRef(__instance)}");
                 }
-                catch (Exception e)
+                else
                 {
-                    UMTLogger.Log(e.ToString());
+                    MainScript.AddFailedStringToDict(Helpers.CustomEscape(storyText), "Say_OnEnter_Patch");
                 }
             }
         }
@@ -130,22 +111,15 @@ namespace EngTranslatorMod.Patches
         {
             static void Prefix(ref string input)
             {
-                try
+                if (Translator.TryGetTranslation(input, out string translation))
                 {
-                    if (Translator.TryGetTranslation(input, out string translation))
-                    {
-                        UMTLogger.Log($"Found matching string!: {translation}");
-                        input = translation;
-                        UMTLogger.Log($"Updated String: {input}");
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(input, "Flowchart_SubstituteVariables_Patch");
-                    }
+                    UMTLogger.Log($"Found matching string!: {translation}");
+                    input = translation;
+                    UMTLogger.Log($"Updated String: {input}");
                 }
-                catch (Exception e)
+                else
                 {
-                    UMTLogger.Log(e.ToString());
+                    MainScript.AddFailedStringToDict(input, "Flowchart_SubstituteVariables_Patch");
                 }
             }
         }
@@ -166,7 +140,7 @@ namespace EngTranslatorMod.Patches
                     }
                     else
                     {
-                        MainScript.AddFailedStringToDict(__result, " Tools_Code64ToString_Patch");
+                        MainScript.AddFailedStringToDict(__result, "Tools_Code64ToString_Patch");
                     }
                 }
                 catch (Exception e)
@@ -181,21 +155,14 @@ namespace EngTranslatorMod.Patches
         {
             static void Postfix(ref string __result)
             {
-                try
+                if (Translator.TryGetTranslation(__result, out string translation))
                 {
-                    if (Translator.TryGetTranslation(__result, out string translation))
-                    {
-                        UMTLogger.Log($"Found matching string!: {translation}");
-                        __result = translation;
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(__result, " Tools_Code64ToString_Patch");
-                    }
+                    UMTLogger.Log($"Found matching string!: {translation}");
+                    __result = translation;
                 }
-                catch (Exception e)
+                else
                 {
-                    UMTLogger.Log(e.ToString());
+                    MainScript.AddFailedStringToDict(__result, "Tools_Code64ToString_Patch");
                 }
             }
         }
@@ -206,22 +173,15 @@ namespace EngTranslatorMod.Patches
         {
             static void Prefix(ref string desstr)
             {
-                try
+                if (Translator.TryGetTranslation(desstr, out string translation))
                 {
-                    if (Translator.TryGetTranslation(desstr, out string translation))
-                    {
-                        UMTLogger.Log($"Found matching string!: {translation}");
-                        desstr = translation;
-                        UMTLogger.Log($"Updated String: {desstr}");
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(desstr, " Tools_getDesc_Patch");
-                    }
+                    UMTLogger.Log($"Found matching string!: {translation}");
+                    desstr = translation;
+                    UMTLogger.Log($"Updated String: {desstr}");
                 }
-                catch (Exception e)
+                else
                 {
-                    UMTLogger.Log(e.ToString());
+                    MainScript.AddFailedStringToDict(desstr, "Tools_getDesc_Patch");
                 }
             }
         }
@@ -230,38 +190,28 @@ namespace EngTranslatorMod.Patches
         [HarmonyPatch(typeof(Skill), "skillInit")]
         static class Tools_skillInit_Patch
         {
-
             static void Postfix(Skill __instance)
             {
-                try
+                if (Translator.TryGetTranslation(__instance.skill_Name, out string skillNameTranslation))
                 {
-                    UMTLogger.Log($"Trying to translate: {__instance.skill_Name}");
-                    if (Translator.TryGetTranslation(__instance.skill_Name, out string skillNameTranslation))
-                    {
-                        UMTLogger.Log($"Found matching string!: {skillNameTranslation}");
-                        __instance.skill_Name = skillNameTranslation;
-                        UMTLogger.Log($"Updated String: {__instance.skill_Name}");
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(__instance.skill_Name, " Tools_skillInit_Patch");
-                    }
-
-                    UMTLogger.Log($"Trying to translate: {__instance.skill_Desc}");
-                    if (Translator.TryGetTranslation(__instance.skill_Desc, out string skillDescTranslation))
-                    {
-                        UMTLogger.Log($"Found matching string!: {skillDescTranslation}");
-                        __instance.skill_Desc = skillDescTranslation;
-                        UMTLogger.Log($"Updated String: {__instance.skill_Desc}");
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(__instance.skill_Desc, " Tools_skillInit_Patch");
-                    }
+                    UMTLogger.Log($"Found matching string!: {skillNameTranslation}");
+                    __instance.skill_Name = skillNameTranslation;
+                    UMTLogger.Log($"Updated String: {__instance.skill_Name}");
                 }
-                catch (Exception e)
+                else
                 {
-                    UMTLogger.Log(e.ToString());
+                    MainScript.AddFailedStringToDict(__instance.skill_Name, " Tools_skillInit_Patch");
+                }
+
+                if (Translator.TryGetTranslation(__instance.skill_Desc, out string skillDescTranslation))
+                {
+                    UMTLogger.Log($"Found matching string!: {skillDescTranslation}");
+                    __instance.skill_Desc = skillDescTranslation;
+                    UMTLogger.Log($"Updated String: {__instance.skill_Desc}");
+                }
+                else
+                {
+                    MainScript.AddFailedStringToDict(__instance.skill_Desc, " Tools_skillInit_Patch");
                 }
             }
         }
@@ -270,40 +220,29 @@ namespace EngTranslatorMod.Patches
         [HarmonyPatch(typeof(Skill), "initStaticSkill")]
         static class Tools_initStaticSkill_Patch
         {
-
             static void Postfix(Skill __instance)
             {
-                try
+                if (Translator.TryGetTranslation(__instance.skill_Name, out string skillNameTranslation))
                 {
-                    UMTLogger.Log($"Trying to translate: {__instance.skill_Name}");
-                    if (Translator.TryGetTranslation(__instance.skill_Name, out string skillNameTranslation))
-                    {
-                        UMTLogger.Log($"Found matching string!: {skillNameTranslation}");
-                        __instance.skill_Name = skillNameTranslation;
-                        UMTLogger.Log($"Updated String: {__instance.skill_Name}");
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(__instance.skill_Name, " initStaticSkill");
-                    }
-
-                    UMTLogger.Log($"Trying to translate: {__instance.skill_Desc}");
-                    if (Translator.TryGetTranslation(__instance.skill_Desc, out string skillDescTranslation))
-                    {
-                        UMTLogger.Log($"Found matching string!: {skillDescTranslation}");
-                        __instance.skill_Desc = skillDescTranslation;
-                        UMTLogger.Log($"Updated String: {__instance.skill_Desc}");
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(__instance.skill_Desc, " initStaticSkill");
-                    }
+                    UMTLogger.Log($"Found matching string!: {skillNameTranslation}");
+                    __instance.skill_Name = skillNameTranslation;
+                    UMTLogger.Log($"Updated String: {__instance.skill_Name}");
                 }
-                catch (Exception e)
+                else
                 {
-                    UMTLogger.Log(e.ToString());
+                    MainScript.AddFailedStringToDict(__instance.skill_Name, " initStaticSkill");
                 }
 
+                if (Translator.TryGetTranslation(__instance.skill_Desc, out string skillDescTranslation))
+                {
+                    UMTLogger.Log($"Found matching string!: {skillDescTranslation}");
+                    __instance.skill_Desc = skillDescTranslation;
+                    UMTLogger.Log($"Updated String: {__instance.skill_Desc}");
+                }
+                else
+                {
+                    MainScript.AddFailedStringToDict(__instance.skill_Desc, " initStaticSkill");
+                }
             }
         }
 
@@ -313,86 +252,76 @@ namespace EngTranslatorMod.Patches
         {
             static void Postfix()
             {
-                try
-                {
-
-                    List<Dictionary<string, string>> stringDictList = new List<Dictionary<string, string>>()
-                {
-                    AccessTools.StaticFieldRefAccess<Dictionary<string, string>>(typeof(TuJianDB), "strTextData"),
-                    AccessTools.StaticFieldRefAccess<Dictionary<string, string>>(typeof(TuJianDB), "_MapIDNameDict")
-                };
-                    List<Dictionary<int, string>> dictList = new List<Dictionary<int, string>>()
-                {
-                    AccessTools.StaticFieldRefAccess<Dictionary<int, string>>(typeof(TuJianDB), "_LQWuWeiTypeName"),
-                    TuJianDB.YaoShouDescData,
-                    TuJianDB.RuleTuJianTypeDescData,
-                    TuJianDB.MiShuDesc2Data,
-                    TuJianDB.GongFaDesc1Data,
-                    TuJianDB.YaoCaoTypeData
-                };
-                    List<Dictionary<string, string>> mergeStringDicts = new List<Dictionary<string, string>>();
-                    foreach (Dictionary<string, string> dict in stringDictList)
+                List<Dictionary<string, string>> stringDictList = new List<Dictionary<string, string>>()
                     {
-                        Dictionary<string, string> mergeDict = new Dictionary<string, string>();
+                        AccessTools.StaticFieldRefAccess<Dictionary<string, string>>(typeof(TuJianDB), "strTextData"),
+                        AccessTools.StaticFieldRefAccess<Dictionary<string, string>>(typeof(TuJianDB), "_MapIDNameDict")
+                    };
+                List<Dictionary<int, string>> dictList = new List<Dictionary<int, string>>()
+                    {
+                        AccessTools.StaticFieldRefAccess<Dictionary<int, string>>(typeof(TuJianDB), "_LQWuWeiTypeName"),
+                        TuJianDB.YaoShouDescData,
+                        TuJianDB.RuleTuJianTypeDescData,
+                        TuJianDB.MiShuDesc2Data,
+                        TuJianDB.GongFaDesc1Data,
+                        TuJianDB.YaoCaoTypeData
+                    };
+                List<Dictionary<string, string>> mergeStringDicts = new List<Dictionary<string, string>>();
+                foreach (Dictionary<string, string> dict in stringDictList)
+                {
+                    Dictionary<string, string> mergeDict = new Dictionary<string, string>();
 
-                        foreach (KeyValuePair<string, string> kvp in dict)
+                    foreach (KeyValuePair<string, string> kvp in dict)
+                    {
+                        UMTLogger.Log($"Trying to translate: {kvp.Value}");
+                        if (Translator.TryGetTranslation(kvp.Value, out string valueTranslation))
                         {
-                            UMTLogger.Log($"Trying to translate: {kvp.Value}");
-                            if (Translator.TryGetTranslation(kvp.Value, out string valueTranslation))
-                            {
-                                mergeDict[kvp.Key] = valueTranslation;
+                            mergeDict[kvp.Key] = valueTranslation;
 
-                            }
-                            else
-                            {
-                                MainScript.AddFailedStringToDict(kvp.Value, " TuJianDB_InitDB_Patch");
-                            }
                         }
-                        mergeStringDicts.Add(mergeDict);
-                    }
-
-                    List<Dictionary<int, string>> mergeIntDicts = new List<Dictionary<int, string>>();
-                    foreach (Dictionary<int, string> dict in dictList)
-                    {
-                        Dictionary<int, string> mergeDict = new Dictionary<int, string>();
-                        foreach (KeyValuePair<int, string> kvp in dict)
+                        else
                         {
-                            UMTLogger.Log($"Trying to translate: {kvp.Value}");
-                            if (Translator.TryGetTranslation(kvp.Value, out string valueTranslation))
-                            {
-                                mergeDict[kvp.Key] = valueTranslation;
-                            }
-                            else
-                            {
-                                MainScript.AddFailedStringToDict(kvp.Value, " TuJianDB_InitDB_Patch");
-                            }
-                        }
-                        mergeIntDicts.Add(mergeDict);
-                    }
-
-                    for (int i = 0; i < mergeStringDicts.Count; i++)
-                    {
-                        Dictionary<string, string> dict = mergeStringDicts[i];
-                        foreach (KeyValuePair<string, string> kvp in dict)
-                        {
-                            stringDictList[i][kvp.Key] = kvp.Value;
+                            MainScript.AddFailedStringToDict(kvp.Value, " TuJianDB_InitDB_Patch");
                         }
                     }
-                    for (int i = 0; i < mergeIntDicts.Count; i++)
-                    {
-                        Dictionary<int, string> dict = mergeIntDicts[i];
-                        foreach (KeyValuePair<int, string> kvp in dict)
-                        {
-                            dictList[i][kvp.Key] = kvp.Value;
-                        }
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    UMTLogger.Log(e.ToString());
+                    mergeStringDicts.Add(mergeDict);
                 }
 
+                List<Dictionary<int, string>> mergeIntDicts = new List<Dictionary<int, string>>();
+                foreach (Dictionary<int, string> dict in dictList)
+                {
+                    Dictionary<int, string> mergeDict = new Dictionary<int, string>();
+                    foreach (KeyValuePair<int, string> kvp in dict)
+                    {
+                        UMTLogger.Log($"Trying to translate: {kvp.Value}");
+                        if (Translator.TryGetTranslation(kvp.Value, out string valueTranslation))
+                        {
+                            mergeDict[kvp.Key] = valueTranslation;
+                        }
+                        else
+                        {
+                            MainScript.AddFailedStringToDict(kvp.Value, " TuJianDB_InitDB_Patch");
+                        }
+                    }
+                    mergeIntDicts.Add(mergeDict);
+                }
+
+                for (int i = 0; i < mergeStringDicts.Count; i++)
+                {
+                    Dictionary<string, string> dict = mergeStringDicts[i];
+                    foreach (KeyValuePair<string, string> kvp in dict)
+                    {
+                        stringDictList[i][kvp.Key] = kvp.Value;
+                    }
+                }
+                for (int i = 0; i < mergeIntDicts.Count; i++)
+                {
+                    Dictionary<int, string> dict = mergeIntDicts[i];
+                    foreach (KeyValuePair<int, string> kvp in dict)
+                    {
+                        dictList[i][kvp.Key] = kvp.Value;
+                    }
+                }
             }
         }
 
@@ -402,25 +331,17 @@ namespace EngTranslatorMod.Patches
         {
             static void Prefix(ref string desc)
             {
-                try
+                //              UMTLogger.Log($"Trying to translate: {desc}");
+                if (Translator.TryGetTranslation(desc, out string descTranslation))
                 {
-                    //              UMTLogger.Log($"Trying to translate: {desc}");
-                    if (Translator.TryGetTranslation(desc, out string descTranslation))
-                    {
-                        //                 UMTLogger.Log($"Found matching string!: {MainScript.translationDict[desc]}");
-                        desc = descTranslation;
-                        //                  UMTLogger.Log($"Updated String: {desc}");
-                    }
-                    else
-                    {
-                        MainScript.AddFailedStringToDict(desc, " USelectNum_Show_Patch");
-                    }
+                    //                 UMTLogger.Log($"Found matching string!: {MainScript.translationDict[desc]}");
+                    desc = descTranslation;
+                    //                  UMTLogger.Log($"Updated String: {desc}");
                 }
-                catch (Exception e)
+                else
                 {
-                    UMTLogger.Log(e.ToString());
+                    MainScript.AddFailedStringToDict(desc, " USelectNum_Show_Patch");
                 }
-
             }
         }
 
@@ -432,33 +353,22 @@ namespace EngTranslatorMod.Patches
             static AccessTools.FieldRef<jsonData, JObject> AllItemLeiXinRef =
             AccessTools.FieldRefAccess<jsonData, JObject>("AllItemLeiXin");
 
-
             static void Postfix(jsonData __instance)
             {
                 JObject AllItemLeiXin = AllItemLeiXinRef(__instance);
 
-                try
+                foreach (KeyValuePair<string, JToken> kvp in AllItemLeiXin)
                 {
-                    foreach (KeyValuePair<string, JToken> kvp in AllItemLeiXin)
+                    if (Translator.TryGetTranslation((string)AllItemLeiXin[kvp.Key]["name"], out string keyTranslation))
                     {
-                        if (Translator.TryGetTranslation((string)AllItemLeiXin[kvp.Key]["name"], out string keyTranslation))
-                        {
 
-                            AllItemLeiXin[kvp.Key]["name"] = keyTranslation;
-                        }
-                        else
-                        {
+                        AllItemLeiXin[kvp.Key]["name"] = keyTranslation;
+                    }
+                    else
+                    {
 
-                        }
                     }
                 }
-                catch (Exception e)
-                {
-                    UMTLogger.Log(e.ToString());
-                }
-
-
-
             }
 
         }
@@ -589,18 +499,12 @@ namespace EngTranslatorMod.Patches
                 List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
                 for (int i = 0; i < codes.Count - 1; i++)
                 {
-
-
                     if (codes[i].opcode == OpCodes.Ldstr && Translator.TryGetTranslation(codes[i].operand.ToString(), out string translation))
                     {
                         codes[i].operand = translation;
                     }
-
-
                 }
                 return codes.AsEnumerable();
-
-
             }
         }
 
