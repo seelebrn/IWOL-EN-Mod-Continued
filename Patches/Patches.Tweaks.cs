@@ -14,7 +14,6 @@ namespace EngTranslatorMod.Patches
             static void Postfix(AutoTranslatorPlugin __instance, ref string __result)
             {
                 __result = MainScript.configDir;
-                UMTLogger.Log(__result);
             }
         }
 
@@ -24,7 +23,6 @@ namespace EngTranslatorMod.Patches
             static void Postfix(AutoTranslatorPlugin __instance, ref string __result)
             {
                 __result = Directory.GetParent(MainScript.sourceDir).ToString();
-                UMTLogger.Log(__result);
             }
         }
     }
