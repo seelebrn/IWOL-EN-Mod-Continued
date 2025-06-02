@@ -1,2 +1,6 @@
 /.vs
 /obj
+bin/Debug/net472/EngTranslatorMod.dll
+bin/Debug/net472/EngTranslatorMod.pdb
+bin/Debug/net472/UnityModularTranslator.dll
+bin/Debug/net472/UnityModularTranslator.pdb
