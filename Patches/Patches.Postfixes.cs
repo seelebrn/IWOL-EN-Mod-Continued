@@ -5,13 +5,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using UnityModularTranslator;
 using UnityModularTranslator.Translation;
-using XUnity.AutoTranslator.Plugin.BepInEx;
 using YSGame.TuJian;
 
 namespace EngTranslatorMod.Patches
