@@ -52,7 +52,6 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    UMTLogger.Log($"Trying to translate: {obj["info"].str}");
                     if (Translator.TryGetTranslation(obj["info"].str, out string translation))
                     {
                         UMTLogger.Log($"Found matching string!: {translation}");
@@ -78,7 +77,6 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    UMTLogger.Log($"Trying to translate: {msg}");
                     if (Translator.TryGetTranslation(msg, out string translation))
                     {
                         UMTLogger.Log($"Found matching string!: {translation}");
@@ -108,8 +106,7 @@ namespace EngTranslatorMod.Patches
                 string storyText = storyTextRef(__instance);
                 try
                 {
-                    UMTLogger.Log($"Trying to translate: {storyText}");
-                    if (Translator.TryGetTranslation(Helpers.CustomEscape(storyText),out string translatedText))
+                    if (Translator.TryGetTranslation(Helpers.CustomEscape(storyText), out string translatedText))
                     {
                         UMTLogger.Log($"Found matching string!: {translatedText}");
                         storyTextRef(__instance) = Helpers.CustomUnescape(translatedText);
@@ -119,7 +116,6 @@ namespace EngTranslatorMod.Patches
                     {
                         MainScript.AddFailedStringToDict(Helpers.CustomEscape(storyText), " Say_OnEnter_Patch");
                     }
-
                 }
                 catch (Exception e)
                 {
@@ -136,7 +132,6 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    UMTLogger.Log($"Trying to translate: {input}");
                     if (Translator.TryGetTranslation(input, out string translation))
                     {
                         UMTLogger.Log($"Found matching string!: {translation}");
@@ -164,7 +159,6 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    UMTLogger.Log($"Trying to translate: {__result}");
                     if (Translator.TryGetTranslation(__result, out string translation))
                     {
                         UMTLogger.Log($"Found matching string!: {translation}");
@@ -172,7 +166,6 @@ namespace EngTranslatorMod.Patches
                     }
                     else
                     {
-                        UMTLogger.Log($"Trying to translate: {__result}");
                         MainScript.AddFailedStringToDict(__result, " Tools_Code64ToString_Patch");
                     }
                 }
@@ -182,15 +175,14 @@ namespace EngTranslatorMod.Patches
                 }
             }
         }
+
         [HarmonyPatch(typeof(Tools), "Code64")]
         static class Tools_Code64_Patch
         {
-
             static void Postfix(ref string __result)
             {
                 try
                 {
-                    UMTLogger.Log($"Trying to translate: {__result}");
                     if (Translator.TryGetTranslation(__result, out string translation))
                     {
                         UMTLogger.Log($"Found matching string!: {translation}");
@@ -198,7 +190,6 @@ namespace EngTranslatorMod.Patches
                     }
                     else
                     {
-                        UMTLogger.Log($"Trying to translate: {__result}");
                         MainScript.AddFailedStringToDict(__result, " Tools_Code64ToString_Patch");
                     }
                 }
@@ -217,7 +208,6 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-                    UMTLogger.Log($"Trying to translate: {desstr}");
                     if (Translator.TryGetTranslation(desstr, out string translation))
                     {
                         UMTLogger.Log($"Found matching string!: {translation}");
