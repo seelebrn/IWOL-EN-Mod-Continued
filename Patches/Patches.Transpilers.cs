@@ -25,10 +25,10 @@ namespace EngTranslatorMod.Patches
         {
             static IEnumerable<MethodBase> TargetMethods()
             {
-                yield return AccessTools.Method(typeof(ToolTipsMag), "CreateShuXing", new Type[] { typeof(Bag.BaseSkill) });
-                yield return AccessTools.Method(typeof(ToolTipsMag), "CreateShuXing", new Type[] { typeof(Bag.BaseItem) });
-                yield return AccessTools.Method(typeof(Bag.BaseSkill), "GetPinJieName");
-                yield return AccessTools.Method(typeof(Bag.BaseSkill), "GetPinJie");
+                yield return AccessTools.Method(typeof(ToolTipsMag), "CreateShuXing", new Type[] { typeof(BaseSkill) });
+                yield return AccessTools.Method(typeof(ToolTipsMag), "CreateShuXing", new Type[] { typeof(BaseItem) });
+                yield return AccessTools.Method(typeof(BaseSkill), "GetPinJieName");
+                yield return AccessTools.Method(typeof(BaseSkill), "GetPinJie");
                 yield return AccessTools.Method(typeof(Skill_UIST), "Show_Tooltip");
                 yield return AccessTools.Method(typeof(ShenTongInfoPanel), "RefreshPanelData");
                 yield return AccessTools.Method(typeof(KuangShiInfoPanel), "RefreshPanelData");
@@ -38,7 +38,6 @@ namespace EngTranslatorMod.Patches
                 yield return AccessTools.Method(typeof(GongFaInfoPanel), "RefreshPanelData");
                 yield return AccessTools.Method(typeof(MiShuInfoPanel), "RefreshPanelData");
                 yield return AccessTools.Method(typeof(YaoShouCaiLiaoInfoPanel), "RefreshPanelData");
-
             }
             static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
@@ -137,8 +136,8 @@ namespace EngTranslatorMod.Patches
             {
                 yield return AccessTools.Method(typeof(MainUIDataCell), "Click");
                 yield return AccessTools.Method(typeof(AvatarInfoCell), "click");
-                yield return AccessTools.Method(typeof(Tab.TabDataBase), "Load");
-                yield return AccessTools.Method(typeof(Tab.TabDataBase), "Save");
+                yield return AccessTools.Method(typeof(TabDataBase), "Load");
+                yield return AccessTools.Method(typeof(TabDataBase), "Save");
 
             }
             static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -146,24 +145,13 @@ namespace EngTranslatorMod.Patches
                 List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
                 for (int i = 0; i < codes.Count - 1; i++)
                 {
-                    if (codes[i].opcode == OpCodes.Ldstr)
-                    {
-
-                    }
-
                     if (codes[i].opcode == OpCodes.Ldstr && Translator.TryGetTranslation(codes[i].operand.ToString(), out string translation))
                     {
                         codes[i].operand = translation;
-
-
                     }
-
                 }
                 return codes.AsEnumerable();
-
-
             }
         }
-
     }
 }
