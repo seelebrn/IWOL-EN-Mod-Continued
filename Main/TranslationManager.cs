@@ -21,7 +21,7 @@ namespace EngTranslatorMod.Main
         }
 
 
-        public void Awake()
+        public void Start()
         {
             Init();
 
@@ -76,10 +76,10 @@ namespace EngTranslatorMod.Main
                 if (Helpers.IsChinese(text.text))
                 {
 
-                    if (MainScript.TextAssetDict.ContainsKey(text.text))
+                    if (Translator.TryGetTranslation(text.text, out string translatedText))
                     {
                         Debug.Log("Found");
-                        text.text = MainScript.TextAssetDict[text.text];
+                        text.text = translatedText;
                     }
                     else
                     {
@@ -92,9 +92,9 @@ namespace EngTranslatorMod.Main
             {
                 if (Helpers.IsChinese(text.text))
                 {
-                    if (MainScript.UILabelsDict.ContainsKey(text.text))
+                    if (Translator.TryGetTranslation(text.text, out string translatedText))
                     {
-                        text.text = MainScript.UILabelsDict[text.text];
+                        text.text = translatedText;
                     }
                     else
                     {

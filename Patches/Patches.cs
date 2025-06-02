@@ -109,10 +109,10 @@ namespace EngTranslatorMod.Patches
                 try
                 {
                     UMTLogger.Log($"Trying to translate: {storyText}");
-                    if (MainScript.FungusSayDict.ContainsKey(Helpers.CustomEscape(storyText)))
+                    if (Translator.TryGetTranslation(Helpers.CustomEscape(storyText),out string translatedText))
                     {
-                        UMTLogger.Log($"Found matching string!: {MainScript.FungusSayDict[Helpers.CustomEscape(storyText)]}");
-                        storyTextRef(__instance) = Helpers.CustomUnescape(MainScript.FungusSayDict[Helpers.CustomEscape(storyText)]);
+                        UMTLogger.Log($"Found matching string!: {translatedText}");
+                        storyTextRef(__instance) = Helpers.CustomUnescape(translatedText);
                         UMTLogger.Log($"Updated String: {storyTextRef(__instance)}");
                     }
                     else

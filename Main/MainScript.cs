@@ -48,13 +48,6 @@ namespace EngTranslatorMod.Main
         public static string sourceDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).ToString();
         public static string parentDir = Directory.GetParent(sourceDir).ToString();
         public static string configDir = Path.Combine(parentDir, "config");
-        public static Dictionary<string, string> UILabelsDict;
-        public static Dictionary<string, string> TextAssetDict;
-        public static Dictionary<string, string> TextAssetDict1;
-        public static Dictionary<string, string> TextAssetDict2;
-        public static Dictionary<string, string> FungusSayDict;
-        public static Dictionary<string, string> FungusMenuDict;
-        public static Dictionary<string, string> etcDict;
         public static Dictionary<string, string> FailedStringsDict = new Dictionary<string, string>(); //String Name, Location; no comparer passed to avoid fuzzy matching invalid strings
 
         public static void TranslateDictionary<T1>(Dictionary<T1, JSONObject> dict, List<string> fields)
@@ -135,7 +128,7 @@ namespace EngTranslatorMod.Main
             //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
         }
 
-        public void Awake()
+        public void Start()
         {
             //Preparing FailedRegistry.txt - Step 1
 
@@ -162,32 +155,31 @@ namespace EngTranslatorMod.Main
                 }
 
                 //We merge these two dictionaries, we also do it on TextAsset cause it's larger so this is more performant
-                Dictionary<string, string> _UITextDict = FileToDictionary("UIText.txt");
+                //Dictionary<string, string> _UITextDict = FileToDictionary("UIText.txt");
 
-                TextAssetDict = FileToDictionary("TextAsset.txt");
-                etcDict = FileToDictionary("etc.txt");
-                TextAssetDict = TextAssetDict.MergeLeft(etcDict);
+                //TextAssetDict = FileToDictionary("TextAsset.txt");
+                //etcDict = FileToDictionary("etc.txt");
+                //TextAssetDict = TextAssetDict.MergeLeft(etcDict);
 
                 /*
                 File.WriteAllLines(
 "C:\\Program Files (x86)\\Steam\\steamapps\\common\\觅长生\\BepInEx\\plugins\\TextAssetBeforeMergeLeft.txt",
 TextAssetDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
-                TextAssetDict = _UITextDict.MergeLeft(TextAssetDict);
+                //TextAssetDict = _UITextDict.MergeLeft(TextAssetDict);
                 /*                File.WriteAllLines(
                 "C:\\Program Files (x86)\\Steam\\steamapps\\common\\觅长生\\BepInEx\\plugins\\TextAssetAfterMergeLeft.txt",
                 TextAssetDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));
                                 */
 
-                TextAssetDict = new Dictionary<string, string>(TextAssetDict, comparer);
+                //TextAssetDict = new Dictionary<string, string>(TextAssetDict, comparer);
                 /*
                                 File.WriteAllLines(
                 "C:\\Program Files (x86)\\Steam\\steamapps\\common\\觅长生\\BepInEx\\plugins\\TextAssetAftercomparer.txt",
                 TextAssetDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));
                 */
-                UILabelsDict = FileToDictionary("UILabel.txt");
-
-                FungusSayDict = FileToDictionary("FungusSay.txt");
-                FungusMenuDict = FileToDictionary("FungusMenu.txt");
+                //UILabelsDict = FileToDictionary("UILabel.txt");
+                //FungusSayDict = FileToDictionary("FungusSay.txt");
+                //FungusMenuDict = FileToDictionary("FungusMenu.txt");
 
                 //TODO: see if these are needed after moving to UMT
                 //translationDict = new Dictionary<string, string>().MergeLeft(TextAssetDict, UILabelsDict);
