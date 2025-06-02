@@ -128,7 +128,7 @@ namespace EngTranslatorMod.Main
             //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
         }
 
-        public void Start()
+        public void Awake()
         {
             //Preparing FailedRegistry.txt - Step 1
 
