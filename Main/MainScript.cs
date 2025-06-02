@@ -43,11 +43,9 @@ namespace EngTranslatorMod.Main
 
         public const string pluginGuid = "Cadenza.IWOL.EnMod";
         public const string pluginName = "ENMod Continued";
-        public const string pluginVersion = "0.5";
-        public static bool enabled;
+        public const string pluginVersion = "0.6";
         public static bool enabledDebugLogging = false;
         public static StripedWhiteSpaceCompare comparer = new StripedWhiteSpaceCompare();
-        public static Dictionary<string, string> translationDict;
         public static string sourceDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).ToString();
         public static string parentDir = Directory.GetParent(sourceDir).ToString();
         public static string configDir = Path.Combine(parentDir, "config");
@@ -196,8 +194,11 @@ TextAssetDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                 FungusSayDict = FileToDictionary("FungusSay.txt");
                 FungusMenuDict = FileToDictionary("FungusMenu.txt");
 
-                translationDict = new Dictionary<string, string>().MergeLeft(TextAssetDict, UILabelsDict);
-                translationDict = new Dictionary<string, string>().MergeLeft(translationDict, FungusMenuDict);
+                //TODO: see if these are needed after moving to UMT
+                //translationDict = new Dictionary<string, string>().MergeLeft(TextAssetDict, UILabelsDict);
+                //translationDict = new Dictionary<string, string>().MergeLeft(translationDict, FungusMenuDict);
+
+
                 /*
                                 File.WriteAllLines(
                 "C:\\Program Files (x86)\\Steam\\steamapps\\common\\觅长生\\BepInEx\\plugins\\TextAsset.txt",
@@ -210,7 +211,9 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                 "C:\\Program Files (x86)\\Steam\\steamapps\\common\\觅长生\\BepInEx\\plugins\\UILabel.txt",
                 UILabelsDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));
                 */
-                translationDict = new Dictionary<string, string>(translationDict, comparer);
+
+                //TODO: see if these are needed after moving to UMT
+                //translationDict = new Dictionary<string, string>(translationDict, comparer);
 
 
                 string s1 = "自古以来，人们从来没有停止过对长生之道的探索...\n上古时代的道家修士们,\n以自身灵根为根基，沟通天地灵气，\n辅以太极五行，阴阳八卦之力，外炼丹药，内修元神，\n留下了无数强大的修真法门。\n传说修为高深者，便能够引动天劫，破碎虚空，\n飞升到仙界，真正成为与天地同寿的“仙人”";

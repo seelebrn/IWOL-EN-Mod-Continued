@@ -16,7 +16,7 @@ namespace EngTranslatorMod.Main
 
         private void Init()
         {
-            Translator.Initialize();
+            Translator.Initialize(Path.Combine(MainScript.sourceDir, "Translations"));
             DontDestroyOnLoad(gameObject);
         }
 
@@ -28,7 +28,6 @@ namespace EngTranslatorMod.Main
             Debug.Log("Translator Kun is alive");
             Debug.Log($"Source Dir Check = {MainScript.sourceDir}");
             Debug.Log($"Parent Source Dir Check = {Directory.GetParent(MainScript.sourceDir)}");
-            Debug.Log($"Source Config Dir Check{MainScript.configDir}");
         }
 
         public void LogCurrentSceneName()
@@ -39,10 +38,6 @@ namespace EngTranslatorMod.Main
 
         private void Update()
         {
-            if (Input.GetKeyUp(KeyCode.F10))
-            {
-                LogCurrentSceneName();
-            }
             if (Input.GetKeyUp(KeyCode.F9))
             {
                 Debug.Log("--- Loggin failed strings ---");

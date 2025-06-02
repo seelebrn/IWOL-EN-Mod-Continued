@@ -327,6 +327,9 @@
     <Reference Include="UnityModManager">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\觅长生\觅长生_Data\Managed\UnityModManager\UnityModManager.dll</HintPath>
     </Reference>
+    <Reference Include="UnityModularTranslator">
+      <HintPath>..\UnityModularTranslator\bin\Debug\UnityModularTranslator.dll</HintPath>
+    </Reference>
     <Reference Include="XCharts.Runtime">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\觅长生\觅长生_Data\Managed\XCharts.Runtime.dll</HintPath>
     </Reference>

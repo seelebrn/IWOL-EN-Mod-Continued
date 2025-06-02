@@ -19,6 +19,7 @@ using UnityEngine.Events;
 using XUnity.AutoTranslator.Plugin.BepInEx;
 using YSGame.EquipRandom;
 using YSGame.TuJian;
+using UnityModularTranslator.Translation;
 
 namespace EngTranslatorMod.Patches
 {
@@ -55,10 +56,10 @@ namespace EngTranslatorMod.Patches
                 try
                 {
                     if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {obj["info"].str}");
-                    if (MainScript.translationDict.ContainsKey(obj["info"].str))
+                    if (Translator.TryGetTranslation(obj["info"].str, out string translation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[obj["info"].str]}");
-                        obj["info"].str = MainScript.translationDict[obj["info"].str];
+                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        obj["info"].str = translation;
                     }
                     else
                     {
@@ -78,14 +79,13 @@ namespace EngTranslatorMod.Patches
         {
             static void Prefix(ref string msg, EmailData emailData)
             {
-
                 try
                 {
                     if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {msg}");
-                    if (MainScript.translationDict.ContainsKey(msg))
+                    if (Translator.TryGetTranslation(msg, out string translation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[msg]}");
-                        msg = MainScript.translationDict[msg];
+                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        msg = translation;
                     }
                     else
                     {
@@ -140,15 +140,15 @@ namespace EngTranslatorMod.Patches
                 try
                 {
                     if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {input}");
-                    if (MainScript.FungusMenuDict.ContainsKey(input))
+                    if (Translator.TryGetTranslation(input, out string translation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.FungusMenuDict[input]}");
-                        input = MainScript.FungusMenuDict[input];
+                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        input = translation;
                         if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {input}");
                     }
                     else
                     {
-                        MainScript.AddFailedStringToDict(input, " Say_AddOption_Patch");
+                        MainScript.AddFailedStringToDict(input, "Flowchart_SubstituteVariables_Patch");
                     }
                 }
                 catch (Exception e)
@@ -167,12 +167,11 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-
-                    if (MainScript.translationDict.ContainsKey(__result))
+                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                    if (Translator.TryGetTranslation(__result, out string translation))
                     {
-                        //if(MainScript.enabledDebugLogging)  Debug.Log($"Found matching string!: {MainScript.translationDict[__result]}");
-                        __result = MainScript.translationDict[__result];
-                        //Debug.Log($"Updated String: {__result}");
+                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        __result = translation;
                     }
                     else
                     {
@@ -194,12 +193,11 @@ namespace EngTranslatorMod.Patches
             {
                 try
                 {
-
-                    if (MainScript.translationDict.ContainsKey(__result))
+                    if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
+                    if (Translator.TryGetTranslation(__result, out string translation))
                     {
-                        //if(MainScript.enabledDebugLogging)  Debug.Log($"Found matching string!: {MainScript.translationDict[__result]}");
-                        __result = MainScript.translationDict[__result];
-                        //Debug.Log($"Updated String: {__result}");
+                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        __result = translation;
                     }
                     else
                     {
@@ -223,10 +221,10 @@ namespace EngTranslatorMod.Patches
                 try
                 {
                     if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {desstr}");
-                    if (MainScript.translationDict.ContainsKey(desstr))
+                    if (Translator.TryGetTranslation(desstr, out string translation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[desstr]}");
-                        desstr = MainScript.translationDict[desstr];
+                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {translation}");
+                        desstr = translation;
                         if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {desstr}");
                     }
                     else
@@ -251,10 +249,10 @@ namespace EngTranslatorMod.Patches
                 try
                 {
                     if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__instance.skill_Name}");
-                    if (MainScript.translationDict.ContainsKey(__instance.skill_Name))
+                    if (Translator.TryGetTranslation(__instance.skill_Name, out string skillNameTranslation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[__instance.skill_Name]}");
-                        __instance.skill_Name = MainScript.translationDict[__instance.skill_Name];
+                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {skillNameTranslation}");
+                        __instance.skill_Name = skillNameTranslation;
                         if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__instance.skill_Name}");
                     }
                     else
@@ -263,10 +261,10 @@ namespace EngTranslatorMod.Patches
                     }
 
                     if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__instance.skill_Desc}");
-                    if (MainScript.translationDict.ContainsKey(__instance.skill_Desc))
+                    if (Translator.TryGetTranslation(__instance.skill_Desc, out string skillDescTranslation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[__instance.skill_Desc]}");
-                        __instance.skill_Desc = MainScript.translationDict[__instance.skill_Desc];
+                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {skillDescTranslation}");
+                        __instance.skill_Desc = skillDescTranslation;
                         if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__instance.skill_Desc}");
                     }
                     else
@@ -278,7 +276,6 @@ namespace EngTranslatorMod.Patches
                 {
                     Debug.Log(e.ToString());
                 }
-
             }
         }
 
@@ -292,10 +289,10 @@ namespace EngTranslatorMod.Patches
                 try
                 {
                     if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__instance.skill_Name}");
-                    if (MainScript.translationDict.ContainsKey(__instance.skill_Name))
+                    if (Translator.TryGetTranslation(__instance.skill_Name, out string skillNameTranslation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[__instance.skill_Name]}");
-                        __instance.skill_Name = MainScript.translationDict[__instance.skill_Name];
+                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {skillNameTranslation}");
+                        __instance.skill_Name = skillNameTranslation;
                         if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__instance.skill_Name}");
                     }
                     else
@@ -304,10 +301,10 @@ namespace EngTranslatorMod.Patches
                     }
 
                     if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__instance.skill_Desc}");
-                    if (MainScript.translationDict.ContainsKey(__instance.skill_Desc))
+                    if (Translator.TryGetTranslation(__instance.skill_Desc, out string skillDescTranslation))
                     {
-                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[__instance.skill_Desc]}");
-                        __instance.skill_Desc = MainScript.translationDict[__instance.skill_Desc];
+                        if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {skillDescTranslation}");
+                        __instance.skill_Desc = skillDescTranslation;
                         if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__instance.skill_Desc}");
                     }
                     else
@@ -354,9 +351,9 @@ namespace EngTranslatorMod.Patches
                         foreach (KeyValuePair<string, string> kvp in dict)
                         {
                             if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {kvp.Value}");
-                            if (MainScript.translationDict.ContainsKey(kvp.Value))
+                            if (Translator.TryGetTranslation(kvp.Value, out string valueTranslation))
                             {
-                                mergeDict[kvp.Key] = MainScript.translationDict[kvp.Value];
+                                mergeDict[kvp.Key] = valueTranslation;
 
                             }
                             else
@@ -374,9 +371,9 @@ namespace EngTranslatorMod.Patches
                         foreach (KeyValuePair<int, string> kvp in dict)
                         {
                             if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {kvp.Value}");
-                            if (MainScript.translationDict.ContainsKey(kvp.Value))
+                            if (Translator.TryGetTranslation(kvp.Value, out string valueTranslation))
                             {
-                                mergeDict[kvp.Key] = MainScript.translationDict[kvp.Value];
+                                mergeDict[kvp.Key] = valueTranslation;
                             }
                             else
                             {
@@ -421,10 +418,10 @@ namespace EngTranslatorMod.Patches
                 try
                 {
                     //              if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {desc}");
-                    if (MainScript.translationDict.ContainsKey(desc))
+                    if (Translator.TryGetTranslation(desc, out string descTranslation))
                     {
                         //                 if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[desc]}");
-                        desc = MainScript.translationDict[desc];
+                        desc = descTranslation;
                         //                  if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {desc}");
                     }
                     else
@@ -457,10 +454,10 @@ namespace EngTranslatorMod.Patches
                 {
                     foreach (KeyValuePair<string, JToken> kvp in AllItemLeiXin)
                     {
-                        if (MainScript.translationDict.ContainsKey((string)AllItemLeiXin[kvp.Key]["name"]))
+                        if (Translator.TryGetTranslation((string)AllItemLeiXin[kvp.Key]["name"], out string keyTranslation))
                         {
 
-                            AllItemLeiXin[kvp.Key]["name"] = MainScript.translationDict[(string)AllItemLeiXin[kvp.Key]["name"]];
+                            AllItemLeiXin[kvp.Key]["name"] = keyTranslation;
                         }
                         else
                         {
@@ -530,9 +527,9 @@ namespace EngTranslatorMod.Patches
                 List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
                 for (int i = 0; i < codes.Count - 1; i++)
                 {
-                    if (codes[i].opcode == OpCodes.Ldstr && MainScript.translationDict.ContainsKey(codes[i].operand.ToString()))
+                    if (codes[i].opcode == OpCodes.Ldstr && Translator.TryGetTranslation(codes[i].operand.ToString(), out string translation))
                     {
-                        codes[i].operand = MainScript.translationDict[codes[i].operand.ToString()];
+                        codes[i].operand = translation;
                     }
                 }
                 return codes.AsEnumerable();
@@ -607,9 +604,9 @@ namespace EngTranslatorMod.Patches
                 {
 
 
-                    if (codes[i].opcode == OpCodes.Ldstr && MainScript.translationDict.ContainsKey(codes[i].operand.ToString()))
+                    if (codes[i].opcode == OpCodes.Ldstr && Translator.TryGetTranslation(codes[i].operand.ToString(), out string translation))
                     {
-                        codes[i].operand = MainScript.translationDict[codes[i].operand.ToString()];
+                        codes[i].operand = translation;
                     }
 
 
@@ -642,9 +639,9 @@ namespace EngTranslatorMod.Patches
 
                     }
 
-                    if (codes[i].opcode == OpCodes.Ldstr && MainScript.translationDict.ContainsKey(codes[i].operand.ToString()))
+                    if (codes[i].opcode == OpCodes.Ldstr && Translator.TryGetTranslation(codes[i].operand.ToString(), out string translation))
                     {
-                        codes[i].operand = MainScript.translationDict[codes[i].operand.ToString()];
+                        codes[i].operand = translation;
 
 
                     }
@@ -668,14 +665,14 @@ namespace EngTranslatorMod.Patches
                 try
                 {
                     // if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
-                    if (MainScript.translationDict.ContainsKey(__result))
+                    if (Translator.TryGetTranslation(__result, out string translation))
                     {
 
                         //     if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[__result]}");
                         //        __result = MainScript.translationDict[__result];
 
 
-                        __instance.str = MainScript.translationDict[__result];
+                        __instance.str = translation;
 
                         //     if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
 
@@ -719,10 +716,10 @@ namespace EngTranslatorMod.Patches
                 try
                 {
                     // if (MainScript.enabledDebugLogging) Debug.Log($"Trying to translate: {__result}");
-                    if (MainScript.translationDict.ContainsKey(__result))
+                    if (Translator.TryGetTranslation(__result, out string translation))
                     {
                         //     if (MainScript.enabledDebugLogging) Debug.Log($"Found matching string!: {MainScript.translationDict[__result]}");
-                        __result = MainScript.translationDict[__result];
+                        __result = translation;
                         //__instance.str = MainScript.translationDict[__result];
 
                         //     if (MainScript.enabledDebugLogging) Debug.Log($"Updated String: {__result}");
