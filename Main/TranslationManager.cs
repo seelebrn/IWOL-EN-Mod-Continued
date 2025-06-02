@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityModularTranslator.Translation;
 
 namespace EngTranslatorMod.Main
 {
@@ -15,12 +16,8 @@ namespace EngTranslatorMod.Main
 
         private void Init()
         {
+            Translator.Initialize();
             DontDestroyOnLoad(gameObject);
-
-            Scene scene = SceneManager.GetActiveScene();
-            Debug.Log($"Scene Name = {scene.name}");
-
-            Debug.Log(gameObject.activeInHierarchy.ToString());
         }
 
 
