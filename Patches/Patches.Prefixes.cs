@@ -15,7 +15,6 @@ namespace EngTranslatorMod.Patches
             {
                 if (Translator.TryGetTranslation(obj["info"].str, out string translation))
                 {
-                    UMTLogger.Log($"Found matching string!: {translation}");
                     obj["info"].str = translation;
                 }
                 else
@@ -31,12 +30,7 @@ namespace EngTranslatorMod.Patches
         {
             static void Prefix(ref string msg, EmailData emailData)
             {
-                if (Translator.TryGetTranslation(msg, out string translation))
-                {
-                    UMTLogger.Log($"Found matching string!: {translation}");
-                    msg = translation;
-                }
-                else
+                if (!Translator.TryGetTranslation(msg, out msg))
                 {
                     MainScript.AddFailedStringToDict(msg, "CyEmailr_GetContent");
                 }
@@ -48,17 +42,14 @@ namespace EngTranslatorMod.Patches
         [HarmonyPatch(typeof(Say), "OnEnter")]
         static class Say_OnEnter_Patch_01
         {
-            static AccessTools.FieldRef<Say, string> storyTextRef =
-                AccessTools.FieldRefAccess<Say, string>("storyText");
+            static AccessTools.FieldRef<Say, string> storyTextRef = AccessTools.FieldRefAccess<Say, string>("storyText");
 
             static void Prefix(Say __instance)
             {
                 string storyText = storyTextRef(__instance);
                 if (Translator.TryGetTranslation(Helpers.CustomEscape(storyText), out string translatedText))
                 {
-                    UMTLogger.Log($"Found matching string!: {translatedText}");
                     storyTextRef(__instance) = Helpers.CustomUnescape(translatedText);
-                    UMTLogger.Log($"Updated String: {storyTextRef(__instance)}");
                 }
                 else
                 {
@@ -73,13 +64,7 @@ namespace EngTranslatorMod.Patches
         {
             static void Prefix(ref string input)
             {
-                if (Translator.TryGetTranslation(input, out string translation))
-                {
-                    UMTLogger.Log($"Found matching string!: {translation}");
-                    input = translation;
-                    UMTLogger.Log($"Updated String: {input}");
-                }
-                else
+                if (!Translator.TryGetTranslation(input, out input))
                 {
                     MainScript.AddFailedStringToDict(input, "Flowchart_SubstituteVariables_Patch");
                 }
@@ -93,13 +78,7 @@ namespace EngTranslatorMod.Patches
     {
         static void Prefix(ref string desstr)
         {
-            if (Translator.TryGetTranslation(desstr, out string translation))
-            {
-                UMTLogger.Log($"Found matching string!: {translation}");
-                desstr = translation;
-                UMTLogger.Log($"Updated String: {desstr}");
-            }
-            else
+            if (!Translator.TryGetTranslation(desstr, out desstr))
             {
                 MainScript.AddFailedStringToDict(desstr, "Tools_getDesc_Patch");
             }
@@ -112,14 +91,7 @@ namespace EngTranslatorMod.Patches
     {
         static void Prefix(ref string desc)
         {
-            //              UMTLogger.Log($"Trying to translate: {desc}");
-            if (Translator.TryGetTranslation(desc, out string descTranslation))
-            {
-                //                 UMTLogger.Log($"Found matching string!: {MainScript.translationDict[desc]}");
-                desc = descTranslation;
-                //                  UMTLogger.Log($"Updated String: {desc}");
-            }
-            else
+            if (Translator.TryGetTranslation(desc, out desc))
             {
                 MainScript.AddFailedStringToDict(desc, " USelectNum_Show_Patch");
             }
