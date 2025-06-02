@@ -1,7 +1,6 @@
 ﻿using EngTranslatorMod.Main;
 using Fungus;
 using HarmonyLib;
-using UnityModularTranslator;
 using UnityModularTranslator.Translation;
 
 namespace EngTranslatorMod.Patches
