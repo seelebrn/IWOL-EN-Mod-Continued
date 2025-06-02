@@ -330,6 +330,9 @@
     <Reference Include="XCharts.Runtime">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\觅长生\觅长生_Data\Managed\XCharts.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="XUnity.AutoTranslator.Plugin.BepInEx">
+      <HintPath>References\XUnity.AutoTranslator.Plugin.BepInEx.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
