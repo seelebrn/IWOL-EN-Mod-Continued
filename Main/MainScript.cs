@@ -39,8 +39,6 @@ namespace EngTranslatorMod.Main
     [BepInPlugin(pluginGuid, pluginName, pluginVersion)]
     public class MainScript : BaseUnityPlugin
     {
-
-
         public const string pluginGuid = "Cadenza.IWOL.EnMod";
         public const string pluginName = "ENMod Continued";
         public const string pluginVersion = "0.6";
@@ -223,8 +221,6 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
 
             try
             {
-
-                //UnityExplorer.ExplorerStandalone.CreateInstance();
                 gameObject.AddComponent<TranslationManager>();
 
                 Harmony harmony = new Harmony("Cadenza.IWOL.EnMod");
@@ -235,10 +231,6 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
                 Debug.Log("Error in applying harmony patches");
                 Debug.LogException(e);
             }
-
-
-
-
         }
 
         public static void PrintDict(Dictionary<string, string> dictionary)
