@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityModularTranslator;
+using UnityModularTranslator.Translation;
 
 namespace EngTranslatorMod.Main
 {
@@ -205,7 +206,7 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
 
             try
             {
-                gameObject.AddComponent<TranslationManager>();
+                Translator.Initialize(Path.Combine(sourceDir, "Translations"));
 
                 Harmony harmony = new Harmony("Cadenza.IWOL.EnMod");
                 Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), null);
