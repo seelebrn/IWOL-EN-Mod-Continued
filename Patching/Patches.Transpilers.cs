@@ -15,13 +15,13 @@ using UnityModularTranslator.Translation;
 using YSGame.EquipRandom;
 using YSGame.TuJian;
 
-namespace EngTranslatorMod.Patches
+namespace EngTranslatorMod.Patching
 {
     public static partial class Patches
     {
         [HarmonyPatch]
 
-        static class Transpiler1_patch
+        public static class Transpiler1_patch
         {
             static IEnumerable<MethodBase> TargetMethods()
             {
@@ -55,7 +55,7 @@ namespace EngTranslatorMod.Patches
 
         [HarmonyPatch]
 
-        static class Transpiler2_patch
+        public static class Transpiler2_patch
         {
             static IEnumerable<MethodBase> TargetMethods()
             {
@@ -130,7 +130,7 @@ namespace EngTranslatorMod.Patches
 
         [HarmonyPatch]
 
-        static class LoadAndSaveMenus
+        public static class LoadAndSaveMenus
         {
             static IEnumerable<MethodBase> TargetMethods()
             {

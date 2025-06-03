@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityModularTranslator;
 using UnityModularTranslator.Translation;
 
 namespace EngTranslatorMod.Main
@@ -25,28 +26,22 @@ namespace EngTranslatorMod.Main
         {
             Init();
 
-            Debug.Log("Translator Kun is alive");
-            Debug.Log($"Source Dir Check = {MainScript.sourceDir}");
-            Debug.Log($"Parent Source Dir Check = {Directory.GetParent(MainScript.sourceDir)}");
-        }
-
-        public void LogCurrentSceneName()
-        {
-            Scene scene = SceneManager.GetActiveScene();
-            Debug.Log(scene.name);
+            UMTLogger.Log("Translator Kun is alive");
+            UMTLogger.Log($"Source Dir Check = {MainScript.sourceDir}");
+            UMTLogger.Log($"Parent Source Dir Check = {Directory.GetParent(MainScript.sourceDir)}");
         }
 
         private void Update()
         {
             if (Input.GetKeyUp(KeyCode.F9))
             {
-                Debug.Log("--- Loggin failed strings ---");
+                UMTLogger.Log("--- Logging failed strings ---");
                 foreach (KeyValuePair<string, string> kvp in MainScript.FailedStringsDict)
                 {
-                    Debug.Log($"'{kvp.Key}' in: {kvp.Value}");
-                    Debug.Log($"'{Regex.Replace(kvp.Key, @"\s*(\n)", string.Empty)}'");
+                    UMTLogger.Log($"'{kvp.Key}' in: {kvp.Value}");
+                    UMTLogger.Log($"'{Regex.Replace(kvp.Key, @"\s*(\n)", string.Empty)}'");
                 }
-                Debug.Log("--- Finished logging failed strings ---");
+                UMTLogger.Log("--- Finished logging failed strings ---");
             }
         }
 
@@ -54,7 +49,7 @@ namespace EngTranslatorMod.Main
         private void LateUpdate()
         {
             knowTexts = knowTexts.Where(x => x != null).ToList();
-            TextTranslator();
+            //TextTranslator();
         }
 
         private void TextTranslator()
@@ -63,9 +58,7 @@ namespace EngTranslatorMod.Main
             Scene scene = SceneManager.GetActiveScene();
             scene.GetRootGameObjects(rootObjectsInScene);
 
-            Text[] allTextComponents = FindObjectsOfType<Text>();
-            UILabel[] allUILabelComponents = FindObjectsOfType<UILabel>();
-            foreach (Text text in allTextComponents)
+            foreach (Text text in FindObjectsOfType<Text>())
             {
                 if (!knowTexts.Contains(text))
                 {
@@ -75,10 +68,8 @@ namespace EngTranslatorMod.Main
 
                 if (Helpers.IsChinese(text.text))
                 {
-
                     if (Translator.TryGetTranslation(text.text, out string translatedText))
                     {
-                        Debug.Log("Found");
                         text.text = translatedText;
                     }
                     else
@@ -88,7 +79,7 @@ namespace EngTranslatorMod.Main
                 }
             }
 
-            foreach (UILabel text in allUILabelComponents)
+            foreach (UILabel text in FindObjectsOfType<UILabel>())
             {
                 if (Helpers.IsChinese(text.text))
                 {

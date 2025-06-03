@@ -3,12 +3,12 @@ using Fungus;
 using HarmonyLib;
 using UnityModularTranslator.Translation;
 
-namespace EngTranslatorMod.Patches
+namespace EngTranslatorMod.Patching
 {
     public static partial class Patches
     {
         [HarmonyPatch(typeof(ChuanYingManager), "ReadData")]
-        static class ChuanYingManager_ReadData_Patch
+        public static class ChuanYingManager_ReadData_Patch
         {
             static void Prefix(ref JSONObject obj)
             {
@@ -25,7 +25,7 @@ namespace EngTranslatorMod.Patches
 
         //I think this is the messages you get from NPCs
         [HarmonyPatch(typeof(CyEmail), "GetContent")]
-        static class CyEmailr_GetContent
+        public static class CyEmailr_GetContent
         {
             static void Prefix(ref string msg, EmailData emailData)
             {
@@ -39,7 +39,7 @@ namespace EngTranslatorMod.Patches
 
         //Fungus dialog box
         [HarmonyPatch(typeof(Say), "OnEnter")]
-        static class Say_OnEnter_Patch_01
+        public static class Say_OnEnter_Patch_01
         {
             static AccessTools.FieldRef<Say, string> storyTextRef = AccessTools.FieldRefAccess<Say, string>("storyText");
 
@@ -59,7 +59,7 @@ namespace EngTranslatorMod.Patches
 
         //Fungus dialog box
         [HarmonyPatch(typeof(Flowchart), "SubstituteVariables")]
-        static class Flowchart_SubstituteVariables_Patch
+        public static class Flowchart_SubstituteVariables_Patch
         {
             static void Prefix(ref string input)
             {

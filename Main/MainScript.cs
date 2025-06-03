@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityModularTranslator;
 
 namespace EngTranslatorMod.Main
 {
@@ -35,7 +35,6 @@ namespace EngTranslatorMod.Main
     }
 
 
-
     [BepInPlugin(pluginGuid, pluginName, pluginVersion)]
     public class MainScript : BaseUnityPlugin
     {
@@ -47,24 +46,6 @@ namespace EngTranslatorMod.Main
         public static string parentDir = Directory.GetParent(sourceDir).ToString();
         public static string configDir = Path.Combine(parentDir, "config");
         public static Dictionary<string, string> FailedStringsDict = new Dictionary<string, string>(); //String Name, Location; no comparer passed to avoid fuzzy matching invalid strings
-
-        public static void TranslateDictionary<T1>(Dictionary<T1, JSONObject> dict, List<string> fields)
-        {
-            foreach (KeyValuePair<T1, JSONObject> kvp in dict)
-            {
-                JSONObject jsonObject = kvp.Value;
-                foreach (string field in fields)
-                {
-                    if (jsonObject.HasField(field))
-                    {
-                        Debug.Log($"Trying to translate: {jsonObject["field"].Str}");
-                    }
-                }
-
-
-            }
-        }
-
         public static void AddFailedStringToDict(string s, string location)
         {
             if (FailedStringsDict.ContainsKey(s))
@@ -125,8 +106,7 @@ namespace EngTranslatorMod.Main
             //    .Select(x => x.First())
             //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, comparer);
         }
-
-        public void Awake()
+        private void SetupFailedRegistry()
         {
             //Preparing FailedRegistry.txt - Step 1
 
@@ -215,9 +195,13 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
             }
             catch (Exception e)
             {
-                Debug.Log("Error in generating dicts");
+                UMTLogger.Log("Error in generating dicts", BepInEx.Logging.LogLevel.Error);
                 Debug.LogException(e);
             }
+        }
+        public void Awake()
+        {
+            SetupFailedRegistry();
 
             try
             {
@@ -225,22 +209,17 @@ translationDict.Select(kvp => string.Format("{0};{1}", kvp.Key, kvp.Value)));*/
 
                 Harmony harmony = new Harmony("Cadenza.IWOL.EnMod");
                 Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), null);
+
+                foreach (var patch in harmony.GetPatchedMethods())
+                {
+                    UMTLogger.Log($"Harmony patch applied: {patch.FullDescription()}");
+                }
             }
             catch (Exception e)
             {
-                Debug.Log("Error in applying harmony patches");
-                Debug.LogException(e);
+                UMTLogger.Log("Error in applying harmony patches", BepInEx.Logging.LogLevel.Error);
+                UMTLogger.Log(e, BepInEx.Logging.LogLevel.Error);
             }
-        }
-
-        public static void PrintDict(Dictionary<string, string> dictionary)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (KeyValuePair<string, string> kvp in dictionary)
-            {
-                sb.AppendLine($"Key = {kvp.Key}, Value = {kvp.Value}");
-            }
-            Debug.Log(sb.ToString());
         }
     }
 }

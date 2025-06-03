@@ -5,16 +5,18 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using UnityEngine.UI;
+using UnityModularTranslator;
 using UnityModularTranslator.Translation;
 using YSGame.TuJian;
 
-namespace EngTranslatorMod.Patches
+namespace EngTranslatorMod.Patching
 {
     public static partial class Patches
     {
         // A lot of things call this for generating descriptions, label values, and the like. This one gets called A LOT. So try to keep this as performant as possible.
         [HarmonyPatch(typeof(Tools), "Code64ToString")]
-        static class Tools_Code64ToString_Patch
+        public static class Tools_Code64ToString_Patch
         {
             static void Postfix(ref string __result)
             {
@@ -26,7 +28,7 @@ namespace EngTranslatorMod.Patches
         }
 
         [HarmonyPatch(typeof(Tools), "Code64")]
-        static class Tools_Code64_Patch
+        public static class Tools_Code64_Patch
         {
             static void Postfix(ref string __result)
             {
@@ -37,7 +39,7 @@ namespace EngTranslatorMod.Patches
             }
         }
         [HarmonyPatch(typeof(Skill), "skillInit")]
-        static class Tools_skillInit_Patch
+        public static class Tools_skillInit_Patch
         {
             static void Postfix(Skill __instance)
             {
@@ -55,7 +57,7 @@ namespace EngTranslatorMod.Patches
 
 
         [HarmonyPatch(typeof(Skill), "initStaticSkill")]
-        static class Tools_initStaticSkill_Patch
+        public static class Tools_initStaticSkill_Patch
         {
             static void Postfix(Skill __instance)
             {
@@ -74,7 +76,7 @@ namespace EngTranslatorMod.Patches
         //Database Info
         //TODO: what the hell is this code.
         [HarmonyPatch(typeof(TuJianDB), nameof(TuJianDB.InitDB))]
-        static class TuJianDB_InitDB_Patch
+        public static class TuJianDB_InitDB_Patch
         {
             static void Postfix()
             {
@@ -154,7 +156,7 @@ namespace EngTranslatorMod.Patches
 
         //This patch is for Items Trading Interest 
         [HarmonyPatch(typeof(jsonData), "InitLogic")]
-        static class jsonData_InitLogic
+        public static class jsonData_InitLogic
         {
             static AccessTools.FieldRef<jsonData, JObject> AllItemLeiXinRef = AccessTools.FieldRefAccess<jsonData, JObject>("AllItemLeiXin");
 
@@ -180,7 +182,7 @@ namespace EngTranslatorMod.Patches
         //TODO: check if needed. Implement if yes, delete if no.
         /*
             [HarmonyPatch]
-            static class UIInput_ValidatePatch
+            public static class UIInput_ValidatePatch
             {
                 // static AccessTools.FieldRef<UIInput, int> AllItemLeiXinRef =
                 // AccessTools.FieldRefAccess<jsonData, JObject>("AllItemLeiXin");
@@ -206,7 +208,7 @@ namespace EngTranslatorMod.Patches
 
         //TODO: clean up comments, refactor if needed.
         [HarmonyPatch(typeof(JSONObject), "Str", MethodType.Getter)]
-        static class JSONObject_Patch
+        public static class JSONObject_Patch
         {
             static AccessTools.FieldRef<JSONObject, string> strRef = AccessTools.FieldRefAccess<JSONObject, string>("str");
             static void Postfix(JSONObject __instance, ref string __result)
@@ -254,6 +256,74 @@ namespace EngTranslatorMod.Patches
                 if (!Translator.TryGetTranslation(__result, out __result))
                 {
                     //MainScript.AddFailedStringToDict(__result, " USelectNum_Show_Patch");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(UILabel), "text", MethodType.Setter)]
+        public static class UILabel_TextSetter_Patch
+        {
+            static void Postfix(UILabel __instance, ref string value)
+            {
+                if (Translator.TryGetTranslation(value, out string translation))
+                {
+                    UMTLogger.Log($"UILabel_TextSetter_Patch: Found matching string!: {value}:{translation}, uilabel");
+                    __instance.text = translation;
+                }
+                else
+                {
+                    MainScript.AddFailedStringToDict(value, " UILabel_TextSetter_Patch");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(UILabel), "OnInit")]
+        public static class UILabel_OnEnable_Patch
+        {
+            static void Postfix(UILabel __instance)
+            {
+                if (Translator.TryGetTranslation(__instance.text, out string translation))
+                {
+                    UMTLogger.Log($"UILabel_OnInit_Patch: Found matching string!: {__instance.text}:{translation}, uilabel");
+                    __instance.text = translation;
+                }
+                else
+                {
+                    MainScript.AddFailedStringToDict(__instance.text, " UILabel_OnEnable_Patch");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Text), "text", MethodType.Setter)]
+        public static class Text_TextSetter_Patch
+        {
+            static void Postfix(Text __instance, ref string value)
+            {
+                if (Translator.TryGetTranslation(value, out string translation))
+                {
+                    UMTLogger.Log($"Text_TextSetter_Patch: Found matching string!: {value}:{translation}, text");
+                    __instance.text = translation;
+                }
+                else
+                {
+                    MainScript.AddFailedStringToDict(value, " Text_TextSetter_Patch");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Text), "OnEnable")]
+        public static class Text_OnEnable_Patch
+        {
+            static void Postfix(Text __instance)
+            {
+                if (Translator.TryGetTranslation(__instance.text, out string translation))
+                {
+                    UMTLogger.Log($"Text_OnEnable_Patch: Found matching string!: {__instance.text}:{translation}, uilabel");
+                    __instance.text = translation;
+                }
+                else
+                {
+                    MainScript.AddFailedStringToDict(__instance.text, " Text_OnEnable_Patch");
                 }
             }
         }
